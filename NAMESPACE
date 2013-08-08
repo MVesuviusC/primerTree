@@ -1,0 +1,8 @@
+export(accession2gi)
+export(get_sequence)
+export(get_sequences)
+export(get_taxonomy)
+export(gi2taxid)
+export(plot_tree_ranks)
+export(primer_search)
+export(primers_search)
