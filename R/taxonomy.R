@@ -6,12 +6,13 @@
 
 get_taxonomy = function(gis){
 
-  taxids = gi2taxid(unique(gis))
+  gis = unique(as.character(gis))
+  taxids = gi2taxid(gis)
 
-  mapping=fetch_taxonomy(unique(taxids))
+  taxonomy=fetch_taxonomy(unique(taxids))
   merge(
-    data.frame(gi=names(taxids), taxId=taxids),
-    mapping
+    data.frame(gi=names(taxids), taxId=taxids, stringsAsFactors=FALSE),
+    taxonomy
   )
 }
 #' Maps a nucleotide database gi to a taxonomy database taxId
@@ -94,5 +95,5 @@ parse_taxon = function(taxon){
   names(names) = ranks
   names = names[ranks != 'no rank']
   names['taxId'] = tax_id
-  as.data.frame(t(names))
+  as.data.frame(t(names), stringsAsFactors=FALSE)
 }

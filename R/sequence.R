@@ -10,7 +10,7 @@
 #' @seealso \code{\link{ape::DNAbin}}
 #' @export get_sequence
 
-get_sequence = function(gi, start=NULL, end=NULL){
+get_sequence = function(gi, start=NULL, stop=NULL){
   library(httr)
   library(ape)
 
@@ -21,8 +21,8 @@ get_sequence = function(gi, start=NULL, end=NULL){
   if(!is.null(start))
     query$seq_start = start
 
-  if(!is.null(end))
-    query$seq_stop = end
+  if(!is.null(stop))
+    query$seq_stop = stop
 
   response = POST(fetch_url, body=query)
 
@@ -43,26 +43,37 @@ get_sequence = function(gi, start=NULL, end=NULL){
 #' @param start start bases to retrieve, numbered beginning at 1.  If NULL the
 #'        beginning of the sequence.
 
-#' @param end end base to retrieve, numbered beginning at 1. if NULL the end of
+#' @param stop stop bases to retrieve, numbered beginning at 1. if NULL the stop of
 #'        the sequence.
+#' @param simplify simplify the FASTA headers to include only the genbank
+#'        accession.
+#' @param .parallel perform loops in parallel
 #' @return an ape::DNAbin object.
 #' @seealso \code{\link{ape::DNAbin}}
 #' @export get_sequences
 
-#TODO fix this list to be one DNAbin object
-get_sequences = function(gi, start, end){
-  size = length(gis)
-  sequences = vector('list', size)
-  for(i in seq_along(gis)){
-    sequences[[i]] = fetch_sequence(gis[i], starts[recycle(i,length(starts))], ends[recycle(i, length(ends))])
+get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, ..., .parallel=FALSE){
+  size = length(gi)
+  get_sequence_itr = function(i){
+    sequence = get_sequence(gi[i], start[recycle(i,length(start))], stop[recycle(i, length(stop))])
   }
+  sequences = alply(seq_along(gi), .margins=1, .parallel=.parallel, get_sequence_itr)
+  names = if(simplify) gi else laply(sequences, names)
+  sequences = llply(sequences, `[[`, 1)
+  names(sequences) = names
+  class(sequences) = 'DNAbin'
   sequences
 }
 recycle = function(x, length){
   ((x-1) %% length) + 1
 }
-#TODO document this function
-tree_from_fasta = function(dna){
+#' Construct a neighbor joining tree from a dna alignment
+#'
+#' @param dna fasta dna object the tree is to be constructed from
+#' @param ... furthur arguments to dist.dna
+#' @seealso \code{\link{ape::dist.dna}}, \code{\link{ape::nj}}
+#' @export tree_from_alignment
+tree_from_alignment = function(dna, ...){
   library(ape)
-  nj(dist(dna))
+  nj(dist(dna, ...))
 }

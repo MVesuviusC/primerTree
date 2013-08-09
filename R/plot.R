@@ -1,11 +1,11 @@
 #' plots a tree with colored and labeled points
 #'
-#' @param tree The ape::phylo object to be plotted.
-#' @param mapping A data.frame with an accession field corresponding to the
+#' @param tree to be plotted, use layout_tree to layout tree.
+#' @param taxonomy A data.frame with an accession field corresponding to the
 #'        tree tip labels.
 #' @param main An optional title for the plot
 #' @param type The type of tree to plot, default unrooted.
-#' @param ranks The ranks to include, defaults to all non-id ranks.
+#' @param ranks The ranks to include, defaults to all common ranks, if null print all ranks.
 #' @param size The size of the colored points
 #' @param size The size of the colored points
 #' @param guide_size The size of the length guide.  If NULL auto detects a
@@ -15,15 +15,15 @@
 #' @return plot to be printed.
 #' @export plot_tree_ranks
 
-plot_tree_ranks = function(tree, mapping, main=NULL, type='unrooted',
-                      ranks=setdiff(names(mapping),
-                                    c('accession', 'gi', 'taxId')),
- size=2,
+plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
+                      ranks=common_ranks,  size=2,
                                     guide_size=NULL, legend_cutoff=25, ...){
+  if(is.null(ranks))
+    ranks = setdiff(names(taxonomy), c('accession', 'gi', 'taxId'))
 
   x = layout_tree_ape(tree, type=type, ...)
 
-  x$tip = merge(x$tip, mapping, by.x='label', by.y='accession', all.x=T)
+  x$tip = merge(x$tip, taxonomy, by.x='label', by.y='gi', all.x=T)
 
   library(gridExtra)
   library(directlabels)
@@ -44,7 +44,7 @@ plot_tree_ranks = function(tree, mapping, main=NULL, type='unrooted',
   plots$structure = p + ggtitle(main)
 
   smart.grid2 = list('get.means', 'calc.boxes', 'empty.grid')
-  for(rank in intersect(ranks, names(mapping))){
+  for(rank in intersect(ranks, names(taxonomy))){
     rows = na.omit(x$tip[, c(rank, 'x', 'y')])
     if(nrow(rows) > 0){
       plots[[rank]]=
@@ -53,7 +53,7 @@ plot_tree_ranks = function(tree, mapping, main=NULL, type='unrooted',
         ggtitle(rank) + scale_x_continuous(expand=c(.1,0)) +
         scale_y_continuous(expand=c(.1, 0)) + theme(legend.position='none')
 
-      if(length(levels(rows[[rank]])) < legend_cutoff){
+      if(length(unique(rows[[rank]])) < legend_cutoff){
         plots[[rank]] = plots[[rank]] +
         geom_dl(data=rows, method=smart.grid2,
                 aes_string(x='x', y='y', color=rank, label=rank))
@@ -63,6 +63,9 @@ plot_tree_ranks = function(tree, mapping, main=NULL, type='unrooted',
   p = do.call(arrangeGrob, plots)
   p
 }
+
+common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "species")
+
 layout_tree_ape = function(tree, ...){
   dev.new()
   plot.phylo(tree, plot=F, ...)

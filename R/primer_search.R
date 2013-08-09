@@ -1,34 +1,42 @@
+#' Query multiple pairs of primers using ncbi's Primer-BLAST, if primers contain iupac
+#'
+#' ambiguity codes, enumerate all possible combinations and combine the
+#' results.
+#'
+#' @inheritParams primer_search
+#' @return list of data.frames of primer hits
+#' @export primers_search
+
+primers_search = function(forward=NULL, reverse=NULL, ..., .parallel=FALSE){
+  if(is.null(forward))
+    blast_primer()
+  results = vector('list', length(forward))
+  alply(seq_along(forward), .margins=1, .parallel=.parallel, 
+        function(i){
+          primer_search(forward[i], reverse[i], ...) 
+        })
+  names(results) = name
+  results
+}
+
 #' Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac
 #'
 #' ambiguity codes, enumerate all possible combinations and combine the
 #' results.
 #' @param forward forward primer to search.
 #' @param reverse reverse primer to search.
-#' @param name name to use for the primer pair, if not given is simply the
-#'        forward and reverse primers seperated by an underscore.
 #' @return data.frame of primer hits
 #' @export primer_search
-primer_search = function(forward, reverse,
-                          name=paste(forward, reverse, sep='_'), ...){
-  primers_search(forward=forward, reverse=reverse, name=name, ...)[[1]]
-}
-
-#' Query multiple pairs of primers using ncbi's Primer-BLAST, if primers contain iupac
-#'
-#' ambiguity codes, enumerate all possible combinations and combine the
-#' results.
-#' @inheritParams primer_search
-#' @return list of data.frames with primer hits
-#' @export primers_search
-
-primers_search = function(forward, reverse,
-                          name=paste(forward, reverse, sep='_'), ...){
+primer_search = function(forward=NULL, reverse, ..., .parallel=.parallel){
+  if(is.null(forward))
+    blast_primer()
   #enumerate all combinations to handle ambiguity codes
   forward_primers = enumerate_ambiguity(forward)
-  primers = data.frame(forward=forward, 
-                       reverse=rep(enumerate_ambiguity(reverse), 
+  primers = data.frame(forward=forward_primers,
+                       reverse=rep(enumerate_ambiguity(reverse),
                                    each=length(forward_primers)))
-  alply(primers, .margins=1, expand=F, blast_primer, ...)
+  alply(primers, .margins=1, .expand=F, .parallel=.parallel,
+        function(row) blast_primer(row$forward, row$reverse, ...))
 }
 iupac = list( "M" = list("A", "C"),
               "R" = list("A", "G"),
@@ -63,8 +71,12 @@ enumerate_ambiguity = function(sequence){
   return(sequence)
 }
 
+print_options = function(options){
+  output = capture.output(print(subset(options, is.na(type) | type != 'hidden',  select=c(name, type, defval)),row.names=F))
+  message(paste(output, "\n", sep=""))
+}
 
-blast_primer = function(forward, reverse, ..., organism='',
+blast_primer = function(forward=NULL, reverse, ..., organism='',
   primer_specificity_database='nt', exclude_env='on'){
   library(httr)
   library(plyr)
@@ -78,6 +90,11 @@ blast_primer = function(forward, reverse, ..., organism='',
 
   all_options = get_options(content)
 
+  if(is.null(forward)){
+    print_options(all_options)
+    stop('No primers specified')
+  }
+
   options = list(..., primer_left_input=forward, primer_right_input=reverse,
                  organism=organism,
                  primer_specificity_database=primer_specificity_database,
@@ -89,7 +106,7 @@ blast_primer = function(forward, reverse, ..., organism='',
   bad_args = is.na(match_args)
 
   if(any(bad_args)){
-    message(subset(all_options, is.na(type) | type != 'hidden',  select=c(name, type, defval)))
+    print_options(all_options)
     stop(paste(names(options)[bad_args], collapse=','), ' not valid option\n')
   }
 
@@ -109,17 +126,16 @@ blast_primer = function(forward, reverse, ..., organism='',
     values = get_refresh_from_meta(response)
   }
   message('blast alignment complete')
-  return(response)
+  response
 }
 
 parse_primer_hits = function(response){
   content = parsable_html(response)
-
   rbind.fill(xpathApply(content, '//pre', parse_pre))
 }
 parse_a = function(a){
-  gid = gsub('.*id=(\\d+)', '\\1', xmlAttrs(a)['href'])
-  data.frame(gid=as.character(gid), accession=as.character(xmlValue(a)))
+  gi = gsub('.*id=(\\d+)', '\\1', xmlAttrs(a)['href'])
+  data.frame(gi=as.character(gi), accession=as.character(xmlValue(a)))
 }
 
 parse_pre = function(pre){
@@ -146,8 +162,8 @@ parse_pre = function(pre){
              forward_stop = as.numeric(values[4]),
              reverse_start = as.numeric(values[5]),
              reverse_stop = as.numeric(values[7]),
-             start=min(values[c(2,4,5,7)]),
-             stop=max(values[c(2,4,5,7)])
+             start=min(as.numeric(values[c(2,4,5,7)])),
+             stop=max(as.numeric(values[c(2,4,5,7)]))
              )
 }
 get_refresh_from_meta = function(response){
@@ -191,5 +207,11 @@ parse_attributes = function(x){
 }
 parsable_html = function(response){
   library(XML)
-  content = htmlParse(content(response, as='text'))
+  #this gsub regex is to remove the definition lines, some of which have
+  #  bracketed <junk> in them, which messes up the parsing
+
+  content = htmlParse(gsub('(viewer.fcgi.*?</a>).*?<pre>\n\n', '\\1\n<pre>', content(response, as='text')))
+}
+deduplicate = function(hits){
+  hits = hits[!duplicated(subset(blast_result, select=c(-X1, -mismatch_forward, -mismatch_reverse))),]
 }

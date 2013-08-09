@@ -2,17 +2,12 @@
 \alias{primer_search}
 \title{Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac}
 \usage{
-  primer_search(forward, reverse,
-    name = paste(forward, reverse, sep = "_"), ...)
+  primer_search(forward = NULL, reverse, ...)
 }
 \arguments{
   \item{forward}{forward primer to search.}
 
   \item{reverse}{reverse primer to search.}
-
-  \item{name}{name to use for the primer pair, if not given
-  is simply the forward and reverse primers seperated by an
-  underscore.}
 }
 \value{
   data.frame of primer hits

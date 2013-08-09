@@ -9,7 +9,8 @@ Description: Query primers and graph their alignments to check their
 Depends:
     R,
     ape,
-    ggplot2
+    ggplot2,
+    plyr
 License: GPL-2
 VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
@@ -18,3 +19,4 @@ Collate:
     'primer_search.R'
     'sequence.R'
     'taxonomy.R'
+    'primer.R'
