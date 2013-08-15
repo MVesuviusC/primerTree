@@ -8,9 +8,15 @@ Description: Query primers and graph their alignments to check their
     sensitivity and specificity for environmental sampling.
 Depends:
     R,
+    XML,
     ape,
+    directlabels,
     ggplot2,
-    plyr
+    gridExtra,
+    httr,
+    plyr,
+    scales,
+    stringr
 License: GPL-2
 VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj

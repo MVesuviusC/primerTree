@@ -11,8 +11,6 @@
 #' @export get_sequence
 
 get_sequence = function(gi, start=NULL, stop=NULL){
-  library(httr)
-  library(ape)
 
   fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
@@ -74,6 +72,5 @@ recycle = function(x, length){
 #' @seealso \code{\link{ape::dist.dna}}, \code{\link{ape::nj}}
 #' @export tree_from_alignment
 tree_from_alignment = function(dna, ...){
-  library(ape)
   nj(dist(dna, ...))
 }

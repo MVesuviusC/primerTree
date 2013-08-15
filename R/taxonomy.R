@@ -22,7 +22,6 @@ get_taxonomy = function(gis){
 #' @export gi2taxid
 
 gi2taxid = function(gi){
-  library(httr)
   url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
 
   names(gi) = rep('id', times=length(gi))
@@ -52,7 +51,6 @@ parse_LinkSet = function(LinkSet){
 #' @export accession2gi
 
 accession2gi = function(accession){
-  library(httr)
   url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
   query=list(db='nuccore', rettype='seqid', id=paste(collapse=',', accession))
 
@@ -70,7 +68,6 @@ accession2gi = function(accession){
   eval(parse(text=paste('c(', mapping, ')', sep='')))
 }
 fetch_taxonomy = function(taxid) {
-  library(httr)
 
   fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
@@ -84,8 +81,6 @@ fetch_taxonomy = function(taxid) {
   parse_taxonomy_xml(content(response))
 }
 parse_taxonomy_xml = function(xml){
-  library(XML)
-  library(plyr)
   rbind.fill(xpathApply(xml, '//TaxaSet/Taxon', parse_taxon))
 }
 parse_taxon = function(taxon){

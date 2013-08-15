@@ -8,7 +8,7 @@
 #' @export primers_search
 
 primers_search = function(forward=NULL, reverse=NULL, ..., .parallel=FALSE){
-  if(is.null(forward))
+  if(is.null(forward) || is.null(reverse)) )
     blast_primer()
   results = vector('list', length(forward))
   alply(seq_along(forward), .margins=1, .parallel=.parallel, 
@@ -27,15 +27,11 @@ primers_search = function(forward=NULL, reverse=NULL, ..., .parallel=FALSE){
 #' @param reverse reverse primer to search.
 #' @return data.frame of primer hits
 #' @export primer_search
-primer_search = function(forward=NULL, reverse, ..., .parallel=.parallel){
-  if(is.null(forward))
+primer_search = function(forward=NULL, reverse=NULL, ..., .parallel=.parallel){
+  if(is.null(forward) || is.null(reverse)) )
     blast_primer()
   #enumerate all combinations to handle ambiguity codes
-  forward_primers = enumerate_ambiguity(forward)
-  primers = data.frame(forward=forward_primers,
-                       reverse=rep(enumerate_ambiguity(reverse),
-                                   each=length(forward_primers)))
-  alply(primers, .margins=1, .expand=F, .parallel=.parallel,
+  alply(enumerate_primers(forward, reverse), .margins=1, .expand=F, .parallel=.parallel,
         function(row) blast_primer(row$forward, row$reverse, ...))
 }
 iupac = list( "M" = list("A", "C"),
@@ -51,8 +47,13 @@ iupac = list( "M" = list("A", "C"),
               "N" = list("A", "C", "G", "T"),
               "I" = list("A", "T", "C"))
 
+enumerate_primers = function(forward, reverse){
+  forward_primers = enumerate_ambiguity(forward)
+  data.frame(forward=forward_primers,
+             reverse=rep(enumerate_ambiguity(reverse),
+                         each=length(forward_primers)))
+}
 enumerate_ambiguity = function(sequence){
-  library(stringr)
   search_regex = paste(names(iupac), collapse='|')
   locs = str_locate_all(sequence, search_regex)
   sequences = list()
@@ -76,10 +77,8 @@ print_options = function(options){
   message(paste(output, "\n", sep=""))
 }
 
-blast_primer = function(forward=NULL, reverse, ..., organism='',
+blast_primer = function(forward=NULL, reverse=NULL, ..., organism='',
   primer_specificity_database='nt', exclude_env='on'){
-  library(httr)
-  library(plyr)
 
   url = 'http://www.ncbi.nlm.nih.gov/tools/primer-blast/'
   form = GET(url)
@@ -90,7 +89,7 @@ blast_primer = function(forward=NULL, reverse, ..., organism='',
 
   all_options = get_options(content)
 
-  if(is.null(forward)){
+  if(is.null(forward) || is.null(reverse)) )
     print_options(all_options)
     stop('No primers specified')
   }
@@ -139,7 +138,6 @@ parse_a = function(a){
 }
 
 parse_pre = function(pre){
-  library(stringr)
   pre_text = xmlValue(pre)
 
   a = getNodeSet(pre, './preceding-sibling::a[1]')
@@ -167,7 +165,6 @@ parse_pre = function(pre){
              )
 }
 get_refresh_from_meta = function(response){
-  library(stringr)
   content = parsable_html(response)
   meta = content['//meta[@http-equiv="Refresh"]']
   if(length(meta) > 0){
@@ -206,12 +203,11 @@ parse_attributes = function(x){
   as.data.frame(t(xmlAttrs(x)))
 }
 parsable_html = function(response){
-  library(XML)
   #this gsub regex is to remove the definition lines, some of which have
   #  bracketed <junk> in them, which messes up the parsing
 
   content = htmlParse(gsub('(viewer.fcgi.*?</a>).*?<pre>\n\n', '\\1\n<pre>', content(response, as='text')))
 }
 deduplicate = function(hits){
-  hits = hits[!duplicated(subset(blast_result, select=c(-X1, -mismatch_forward, -mismatch_reverse))),]
+  hits = hits[!duplicated(subset(hits, select=c(-X1, -mismatch_forward, -mismatch_reverse))),]
 }

@@ -8,3 +8,4 @@
 # Implementation #
 [ ] - filter alignments for exact sequences (how to handle different taxa???)
 [ ] - handle hits to the same gi at different locations, this will crash clustalw currently.
+[ ] - enumerate dropdown options

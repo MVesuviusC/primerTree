@@ -3,7 +3,7 @@
 \title{Retrieves fasta sequences from NCBI nucleotide database.}
 \usage{
   get_sequences(gi, start = NULL, stop = NULL,
-    simplify = TRUE)
+    simplify = TRUE, ..., .parallel = FALSE)
 }
 \arguments{
   \item{start}{start bases to retrieve, numbered beginning
@@ -14,6 +14,8 @@
 
   \item{simplify}{simplify the FASTA headers to include
   only the genbank accession.}
+
+  \item{.parallel}{perform loops in parallel}
 }
 \value{
   an ape::DNAbin object.

@@ -2,7 +2,8 @@
 \alias{primer_search}
 \title{Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac}
 \usage{
-  primer_search(forward = NULL, reverse, ...)
+  primer_search(forward = NULL, reverse, ...,
+    .parallel = .parallel)
 }
 \arguments{
   \item{forward}{forward primer to search.}

@@ -25,9 +25,6 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
 
   x$tip = merge(x$tip, taxonomy, by.x='label', by.y='gi', all.x=T)
 
-  library(gridExtra)
-  library(directlabels)
-  library(scales)
   range_x = range(x$edge$x, x$tip$x)
   min_y = expand_range(range(x$edge$y, x$tip$y), mul=.1)[1]
 
@@ -67,7 +64,7 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
 common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "species")
 
 layout_tree_ape = function(tree, ...){
-  dev.new()
+  pdf(file='/dev/null') #hack to write no output
   plot.phylo(tree, plot=F, ...)
   dev.off()
   last = .PlotPhyloEnv$last_plot.phylo
