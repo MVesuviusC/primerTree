@@ -7,11 +7,11 @@
 #' @param type The type of tree to plot, default unrooted.
 #' @param ranks The ranks to include, defaults to all common ranks, if null print all ranks.
 #' @param size The size of the colored points
-#' @param size The size of the colored points
 #' @param guide_size The size of the length guide.  If NULL auto detects a
 #'        reasonable size.
 #' @param legend_cutoff The number of different taxa names after which the
 #'        names are no longer printed.
+#' @param ... additional arguments passed to layout_tree_ape
 #' @return plot to be printed.
 #' @export plot_tree_ranks
 
@@ -74,14 +74,21 @@ layout_tree_ape = function(tree, ...){
 
   new$edge$y = last$yy[last$edge[,1]]
   new$edge$yend = last$yy[last$edge[,2]]
+  new$edge$id = tree$edge
 
-  new$edge = data.frame(new$edge)
+  new$edge = data.frame(new$edge, stringsAsFactors=F)
 
   new$tip$x = last$xx[1:last$Ntip]
   new$tip$y = last$yy[1:last$Ntip]
   new$tip$label = tree$tip.label
+  new$tip$id = 1:last$Ntip
 
-  new$tip = data.frame(new$tip)
+  new$tip = data.frame(new$tip, stringsAsFactors=F)
+
+  new$node$x = last$xx[(last$Ntip + 1):length(last$xx)]
+  new$node$y = last$yy[(last$Ntip + 1):length(last$yy)]
+  new$node$label = tree$node.label
+  new$node = data.frame(new$node, stringsAsFactors=F)
 
   new
 }

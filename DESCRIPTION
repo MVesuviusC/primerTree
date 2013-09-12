@@ -1,11 +1,11 @@
-Package: primer
+Package: primerTree
 Version: 0.1.0
 Date: 2013-8-13
 Maintainer: Jim Hester <james.f.hester@gmail.com>
 Author: Jim Hester
-Title: Primer
-Description: Query primers and graph their alignments to check their
-    sensitivity and specificity for environmental sampling.
+Title: PrimerTree
+Description: Query primers and graph their aligned products to
+    get a sense of sensitivity and specificity for environmental sampling.
 Depends:
     R,
     XML,
@@ -14,6 +14,7 @@ Depends:
     ggplot2,
     gridExtra,
     httr,
+    lubridate,
     plyr,
     scales,
     stringr
@@ -22,7 +23,7 @@ VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
 Collate:
     'plot.R'
-    'primer_search.R'
     'sequence.R'
     'taxonomy.R'
-    'primer.R'
+    'primerTree.R'
+    'search.R'

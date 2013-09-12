@@ -1,0 +1,19 @@
+\name{tree_from_alignment}
+\alias{tree_from_alignment}
+\title{Construct a neighbor joining tree from a dna alignment}
+\usage{
+  tree_from_alignment(dna, ...)
+}
+\arguments{
+  \item{dna}{fasta dna object the tree is to be constructed
+  from}
+
+  \item{...}{furthur arguments to dist.dna}
+}
+\description{
+  Construct a neighbor joining tree from a dna alignment
+}
+\seealso{
+  \code{\link{ape::dist.dna}}, \code{\link{ape::nj}}
+}
+

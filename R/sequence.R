@@ -45,25 +45,35 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 #'        the sequence.
 #' @param simplify simplify the FASTA headers to include only the genbank
 #'        accession.
-#' @param .parallel perform loops in parallel
+#' @param .parallel if 'TRUE', perform in parallel, using parallel backend
+#'        provided by foreach
+#' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
 #' @return an ape::DNAbin object.
 #' @seealso \code{\link{ape::DNAbin}}
 #' @export get_sequences
 
-get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, ..., .parallel=FALSE){
+get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, ..., .parallel=FALSE, .progress='none'){
+  #expand arguments by recycling
+  args = expand_arguments(gi=gi, start=start, stop=stop)
+  #assign expanded arguments to actual arguments
+  lapply(seq_along(args), function(i) names(args)[i] <<- args[i])
+
   size = length(gi)
   get_sequence_itr = function(i){
-    sequence = get_sequence(gi[i], start[recycle(i,length(start))], stop[recycle(i, length(stop))])
+    sequence = get_sequence(gi[i], start[i], stop[i])
   }
-  sequences = alply(seq_along(gi), .margins=1, .parallel=.parallel, get_sequence_itr)
+  sequences = alply(seq_along(gi), .margins=1, .parallel=.parallel, .progress=.progress, failwith(NA, f=get_sequence_itr))
   names = if(simplify) gi else laply(sequences, names)
   sequences = llply(sequences, `[[`, 1)
   names(sequences) = names
   class(sequences) = 'DNAbin'
   sequences
 }
-recycle = function(x, length){
-  ((x-1) %% length) + 1
+# from http://stackoverflow.com/questions/9335099/implementation-of-standard-recycling-rules
+expand_arguments <- function(...){
+  dotList <- list(...)
+  max.length <- max(sapply(dotList, length))
+  lapply(dotList, rep, length=max.length)
 }
 #' Construct a neighbor joining tree from a dna alignment
 #'
@@ -73,4 +83,47 @@ recycle = function(x, length){
 #' @export tree_from_alignment
 tree_from_alignment = function(dna, ...){
   nj(dist(dna, ...))
+}
+#' Multiple sequence alignment with clustal omega
+#'
+#' Calls clustal omega to align a set of sequences of class DNAbin.
+#' @param x an object of class 'DNAbin'
+#' @param exec a character string with the name or path to the program
+#' @param quiet whether to supress output to stderr or stdout
+#' @param original.ordering use the original ordering of the sequences
+clustalo = function (x, exec = 'clustalo', quiet = TRUE, original.ordering = TRUE, ...)
+{
+    help_text = system(paste(exec, '--help'), intern=TRUE)
+    all_options = get_command_options(help_text)
+
+    inf <- tempfile(fileext='.fas')
+    outf <- tempfile(fileext='.aln')
+
+    options = c(infile=inf, outfile=outf, list(...))
+    match_args = pmatch(names(options), names(all_options), duplicates.ok=TRUE)
+    bad_args = is.na(match_args)
+
+    if (missing(x)){
+        message(paste(help_text, collapse="\n"))
+        stop('No input')
+    }
+    if(any(bad_args)){
+      stop(paste(names(options)[bad_args], collapse=','), ' not valid option\n')
+    }
+
+    write.dna(x, inf, "fasta")
+    args = paste(paste(all_options[match_args], options, collapse=' '))
+    system2(exec, args=args, stdout = ifelse(quiet, FALSE, ''), stderr = ifelse(quiet, FALSE, ''))
+    res <- read.dna(outf, "fasta")
+    if (original.ordering)
+        res <- res[labels(x), ]
+    res
+}
+
+#parses the usage and enumerates the commands
+get_command_options = function(usage){
+  m = gregexpr('-+\\w+', usage)
+  arguments = unlist(regmatches(usage, m))
+  names(arguments) = gsub('-+', '', arguments)
+  arguments
 }

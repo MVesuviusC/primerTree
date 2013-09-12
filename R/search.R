@@ -7,13 +7,13 @@
 #' @return list of data.frames of primer hits
 #' @export primers_search
 
-primers_search = function(forward=NULL, reverse=NULL, ..., .parallel=FALSE){
-  if(is.null(forward) || is.null(reverse)) )
+primers_search = function(forward, reverse, ..., .parallel=FALSE, .progress='none'){
+  if(missing(forward) || missing(reverse))
     blast_primer()
   results = vector('list', length(forward))
-  alply(seq_along(forward), .margins=1, .parallel=.parallel, 
+  alply(seq_along(forward), .margins=1, .parallel=.parallel, .progress=.progress,
         function(i){
-          primer_search(forward[i], reverse[i], ...) 
+          primer_search(forward[i], reverse[i], ...)
         })
   names(results) = name
   results
@@ -25,13 +25,16 @@ primers_search = function(forward=NULL, reverse=NULL, ..., .parallel=FALSE){
 #' results.
 #' @param forward forward primer to search.
 #' @param reverse reverse primer to search.
+#' @param .parallel if 'TRUE', perform in parallel, using parallel backend
+#'        provided by foreach
+#' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
 #' @return data.frame of primer hits
 #' @export primer_search
-primer_search = function(forward=NULL, reverse=NULL, ..., .parallel=.parallel){
-  if(is.null(forward) || is.null(reverse)) )
+primer_search = function(forward, reverse, ..., .parallel=FALSE, .progress='none'){
+  if(missing(forward) || missing(reverse))
     blast_primer()
   #enumerate all combinations to handle ambiguity codes
-  alply(enumerate_primers(forward, reverse), .margins=1, .expand=F, .parallel=.parallel,
+  alply(enumerate_primers(forward, reverse), .margins=1, .expand=F, .parallel=.parallel, .progress=.progress,
         function(row) blast_primer(row$forward, row$reverse, ...))
 }
 iupac = list( "M" = list("A", "C"),
@@ -73,11 +76,15 @@ enumerate_ambiguity = function(sequence){
 }
 
 print_options = function(options){
-  output = capture.output(print(subset(options, is.na(type) | type != 'hidden',  select=c(name, type, defval)),row.names=F))
+  output = capture.output( print(
+                                 subset(options, is.na(type) | type != 'hidden',
+                                        select=c(name, type, defval)), row.names=F)
+                          )
+
   message(paste(output, "\n", sep=""))
 }
 
-blast_primer = function(forward=NULL, reverse=NULL, ..., organism='',
+blast_primer = function(forward, reverse, ..., organism='',
   primer_specificity_database='nt', exclude_env='on'){
 
   url = 'http://www.ncbi.nlm.nih.gov/tools/primer-blast/'
@@ -89,7 +96,7 @@ blast_primer = function(forward=NULL, reverse=NULL, ..., organism='',
 
   all_options = get_options(content)
 
-  if(is.null(forward) || is.null(reverse)) )
+  if(missing(forward) || missing(reverse)){
     print_options(all_options)
     stop('No primers specified')
   }
@@ -111,6 +118,8 @@ blast_primer = function(forward=NULL, reverse=NULL, ..., organism='',
 
   options = get_defaults(options, all_options)
 
+  start_time = now()
+
   response = POST(paste(url, 'primertool.cgi', sep=''), body=options)
 
   stop_for_status(response)
@@ -122,9 +131,11 @@ blast_primer = function(forward=NULL, reverse=NULL, ..., organism='',
     Sys.sleep(values[1])
     response = GET(values[2])
     stop_for_status(response)
+
     values = get_refresh_from_meta(response)
   }
-  message('blast alignment complete')
+  total_time = start_time %--% now()
+  message('blast alignment completed in ', total_time %/% seconds(1), ' seconds')
   response
 }
 
@@ -133,7 +144,15 @@ parse_primer_hits = function(response){
   rbind.fill(xpathApply(content, '//pre', parse_pre))
 }
 parse_a = function(a){
-  gi = gsub('.*id=(\\d+)', '\\1', xmlAttrs(a)['href'])
+  #links like entrez/viewer.fcgi?db=nucleotide&id=452085006
+  m = regexpr('id=\\d+', xmlAttrs(a)['href'])
+  gi = gsub('id=', '', unlist(regmatches(xmlAttrs(a)['href'], m)))
+  if(length(gi) == 0L){
+    #links like nucleotide/449036831?from=1107741&to=1107929&report=gbwithparts
+    m = regexpr('nucleotide/\\d+', xmlAttrs(a)['href'])
+    gi = gsub('nucleotide/', '', unlist(regmatches(xmlAttrs(a)['href'], m)))
+  }
+  if(length(gi) == 0L) gi = NA
   data.frame(gi=as.character(gi), accession=as.character(xmlValue(a)))
 }
 
@@ -160,8 +179,8 @@ parse_pre = function(pre){
              forward_stop = as.numeric(values[4]),
              reverse_start = as.numeric(values[5]),
              reverse_stop = as.numeric(values[7]),
-             start=min(as.numeric(values[c(2,4,5,7)])),
-             stop=max(as.numeric(values[c(2,4,5,7)]))
+             product_start=min(as.numeric(values[c(2,4,5,7)])),
+             product_stop=max(as.numeric(values[c(2,4,5,7)]))
              )
 }
 get_refresh_from_meta = function(response){
@@ -208,6 +227,7 @@ parsable_html = function(response){
 
   content = htmlParse(gsub('(viewer.fcgi.*?</a>).*?<pre>\n\n', '\\1\n<pre>', content(response, as='text')))
 }
-deduplicate = function(hits){
-  hits = hits[!duplicated(subset(hits, select=c(-X1, -mismatch_forward, -mismatch_reverse))),]
+filter_duplicates = function(hits){
+  location_columns = c('accession', 'forward_start', 'forward_stop', 'reverse_start', 'reverse_stop')
+  hits[!duplicated(t(apply(hits[location_columns], 1, range))),]
 }

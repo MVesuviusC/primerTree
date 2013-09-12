@@ -22,13 +22,14 @@
 
   \item{size}{The size of the colored points}
 
-  \item{size}{The size of the colored points}
-
   \item{guide_size}{The size of the length guide.  If NULL
   auto detects a reasonable size.}
 
   \item{legend_cutoff}{The number of different taxa names
   after which the names are no longer printed.}
+
+  \item{...}{additional arguments passed to
+  layout_tree_ape}
 }
 \value{
   plot to be printed.

@@ -1,0 +1,24 @@
+\name{clustalo}
+\alias{clustalo}
+\title{Multiple sequence alignment with clustal omega}
+\usage{
+  clustalo(x, exec = "clustalo", quiet = TRUE,
+    original.ordering = TRUE, ...)
+}
+\arguments{
+  \item{x}{an object of class 'DNAbin'}
+
+  \item{exec}{a character string with the name or path to
+  the program}
+
+  \item{quiet}{whether to supress output to stderr or
+  stdout}
+
+  \item{original.ordering}{use the original ordering of the
+  sequences}
+}
+\description{
+  Calls clustal omega to align a set of sequences of class
+  DNAbin.
+}
+
