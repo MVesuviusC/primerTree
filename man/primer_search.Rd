@@ -2,13 +2,20 @@
 \alias{primer_search}
 \title{Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac}
 \usage{
-  primer_search(forward, reverse, ..., .parallel = FALSE,
-    .progress = "none")
+  primer_search(forward, reverse, num_permutations = 25,
+    ..., .parallel = FALSE, .progress = "none")
 }
 \arguments{
-  \item{forward}{forward primer to search.}
+  \item{forward}{forward primer to search by 5'-3' on plus
+  strand}
 
-  \item{reverse}{reverse primer to search.}
+  \item{reverse}{reverse primer to search by 5'-3' on minus
+  strand}
+
+  \item{the}{number of primer permutations to search, if
+  the degenerate bases cause more than this number of
+  permutations to exist, this number will be sampled from
+  all possible permutations.}
 
   \item{.parallel}{if 'TRUE', perform in parallel, using
   parallel backend provided by foreach}

@@ -1,41 +1,31 @@
-#' Query multiple pairs of primers using ncbi's Primer-BLAST, if primers contain iupac
-#'
-#' ambiguity codes, enumerate all possible combinations and combine the
-#' results.
-#'
-#' @inheritParams primer_search
-#' @return list of data.frames of primer hits
-#' @export primers_search
-
-primers_search = function(forward, reverse, ..., .parallel=FALSE, .progress='none'){
-  if(missing(forward) || missing(reverse))
-    blast_primer()
-  results = vector('list', length(forward))
-  alply(seq_along(forward), .margins=1, .parallel=.parallel, .progress=.progress,
-        function(i){
-          primer_search(forward[i], reverse[i], ...)
-        })
-  names(results) = name
-  results
-}
-
 #' Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac
 #'
 #' ambiguity codes, enumerate all possible combinations and combine the
 #' results.
-#' @param forward forward primer to search.
-#' @param reverse reverse primer to search.
+#' @param forward forward primer to search by 5'-3' on plus strand
+#' @param reverse reverse primer to search by 5'-3' on minus strand
+#' @param num_aligns number of alignment results to keep
+#' @param num_permutations the number of primer permutations to search, if the degenerate bases
+#'        cause more than this number of permutations to exist, this number will be
+#'        sampled from all possible permutations.
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
 #'        provided by foreach
 #' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
 #' @return data.frame of primer hits
 #' @export primer_search
-primer_search = function(forward, reverse, ..., .parallel=FALSE, .progress='none'){
+primer_search = function(forward, reverse, num_aligns=500, num_permutations=25, ..., .parallel=FALSE, .progress='none'){
   if(missing(forward) || missing(reverse))
-    blast_primer()
+    BLAST_primer()
+  primers = enumerate_primers(forward, reverse)
+  num_primers = nrow(primers)
+  if(num_primers > num_permutations){
+    warning(immediate.=T, 'primers have ', num_primers, ' possible combinations due to degenerate bases, sampling ', num_permutations, " primers, use 'num_permutations' to change")
+    primers = primers[ sample.int(num_primers, num_permutations, replace=F), ]
+  }
+  message('BLASTing ', nrow(primers), ' primer combinations')
   #enumerate all combinations to handle ambiguity codes
-  alply(enumerate_primers(forward, reverse), .margins=1, .expand=F, .parallel=.parallel, .progress=.progress,
-        function(row) blast_primer(row$forward, row$reverse, ...))
+  alply(primers, .margins=1, .expand=F, .parallel=.parallel, .progress=.progress,
+        function(row) BLAST_primer(row$forward, row$reverse, num_targets_with_primers=max(num_aligns %/% nrow(primers), 1), ...))
 }
 iupac = list( "M" = list("A", "C"),
               "R" = list("A", "G"),
@@ -84,7 +74,7 @@ print_options = function(options){
   message(paste(output, "\n", sep=""))
 }
 
-blast_primer = function(forward, reverse, ..., organism='',
+BLAST_primer = function(forward, reverse, ..., organism='',
   primer_specificity_database='nt', exclude_env='on'){
 
   url = 'http://www.ncbi.nlm.nih.gov/tools/primer-blast/'
@@ -120,6 +110,7 @@ blast_primer = function(forward, reverse, ..., organism='',
 
   start_time = now()
 
+  message('Submitting Primer-BLAST query')
   response = POST(paste(url, 'primertool.cgi', sep=''), body=options)
 
   stop_for_status(response)
@@ -127,7 +118,7 @@ blast_primer = function(forward, reverse, ..., organism='',
   values = get_refresh_from_meta(response)
 
   while(length(values) > 0){
-    message('blast alignment processing, refreshing in ', values[1], ' seconds...')
+    message('BLAST alignment processing, refreshing in ', values[1], ' seconds...')
     Sys.sleep(values[1])
     response = GET(values[2])
     stop_for_status(response)
@@ -135,7 +126,7 @@ blast_primer = function(forward, reverse, ..., organism='',
     values = get_refresh_from_meta(response)
   }
   total_time = start_time %--% now()
-  message('blast alignment completed in ', total_time %/% seconds(1), ' seconds')
+  message('BLAST alignment completed in ', total_time %/% seconds(1), ' seconds')
   response
 }
 

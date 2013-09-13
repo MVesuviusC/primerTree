@@ -30,57 +30,44 @@ plot.primerTree = function(x, ...){
   plot_tree_ranks(x$tree, x$taxonomy, x$name, ...)
 }
 #' Automatic primer searching'
-#' @param forward forward primer to search by 5'-3'
-#' @param reverse reverse primer to search by 3'-5'
 #' @param name name to give to the primer pair
-#' @param num_aligns name to give to the primer pair
 #' @param simplify use simple names for primer hit results or complex
-#' @param the number of primer permutations to search, if the degenerate bases
-#'        cause more than this number of permutations to exist, this number will be
-#'        sampled from all possible permutations.
-#' @param ... additional arguments for primer_search, run primer_search with no
-#'        arguments to see all available options
-#' @param .parallel use the parallel foreach, see foreach and plyr
-#' @export search_primer
-search_primer = function(forward, reverse, name=NULL, num_aligns=500, num_permutations=25, simplify=TRUE, ...,
-                         .parallel=FALSE){
+#' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
+#' @inheritParams primer_search
+#' @export search_primer_pair
+search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500, num_permutations=25, simplify=TRUE, ...,
+                         .parallel=FALSE, .progress='none'){
 
   #HACK, primerTree is an environment rather than a list so we can treat it as a pointer
 
   primer_search = new.env(parent=globalenv())
-  class(primer_search) = 'primerTree'
   #list all primers used to search
-  env2list(
+  primer_search = env2list(
     try_default({
       primer_search$name = if(!is.null(name)) name
                     else name=paste(forward, reverse, sep='_')
 
-      primer_search$primers = enumerate_primers(forward, reverse)
-      if(nrow(primer_search$primers) > num_permutations){
-        message('sampling ', num_permutations, ' primers from ', nrow(primer_search$primers), ' possible combinations')
-        primer_search$primers = primer_search$primers[ sample.int(nrow(primer_search$primers), num_permutations, replace=F), ]
-      }
-      message('blasting ', nrow(primer_search$primers), ' primer combinations')
-      primer_search$response = primer_search(forward, reverse, ...,
-                                      .parallel=.parallel,
-                                      num_targets_with_primers=num_aligns %/%
-                                      nrow(primer_search$primers))
-
-      primer_search$blast_result =
+      primer_search$response = primer_search(forward, reverse,
+                                             num_permutations=num_permutations,
+                                             .progress=.progress,
+                                             .parallel=.parallel,
+                                             num_aligns=num_aligns,
+                                             ...)
+      primer_search$BLAST_result =
         filter_duplicates(ldply(primer_search$response, parse_primer_hits, .parallel=.parallel))
 
-      message(nrow(primer_search$blast_result), ' blast alignments parsed')
+      message(nrow(primer_search$BLAST_result), ' BLAST alignments parsed')
 
-      primer_search$sequence = get_sequences(primer_search$blast_result$gi,
-                                             primer_search$blast_result$product_start,
-                                             primer_search$blast_result$product_stop,
+      primer_search$sequence = get_sequences(primer_search$BLAST_result$gi,
+                                             primer_search$BLAST_result$product_start,
+                                             primer_search$BLAST_result$product_stop,
                                              simplify=simplify,
                                              .parallel=.parallel)
 
       lengths = laply(primer_search$sequence, length)
       message(length(primer_search$sequence), ' sequences retrieved from NCBI,',
               ' min:', min(lengths),
-              ' mean:', mean(lengths),
+              ' mean:', round(mean(lengths),2),
               ' max:', max(lengths))
 
       primer_search$alignment = clustalo(primer_search$sequence, threads=getDoParWorkers())
@@ -90,10 +77,12 @@ search_primer = function(forward, reverse, name=NULL, num_aligns=500, num_permut
       primer_search$tree = tree_from_alignment(primer_search$alignment)
       message('constructed neighbor joining tree')
 
-      primer_search$taxonomy = get_taxonomy(primer_search$blast_result$gi)
+      primer_search$taxonomy = get_taxonomy(primer_search$BLAST_result$gi)
       primer_search
     }, default=primer_search)
   )
+  class(primer_search) = 'primerTree'
+  primer_search
 }
 
 env2list = function(env){

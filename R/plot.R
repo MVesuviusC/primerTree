@@ -34,8 +34,11 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
   p = ggplot() +
    geom_segment(data=x$edge, aes(x=x, y=y, xend=xend, yend=yend)) +
     theme_noaxis() +
-    annotate('segment', x=range_x[1], y=min_y, xend=range_x[1]+guide_size, yend=min_y, vjust=1, arrow=arrow(ends="both",angle=90,length=unit(.2,"cm"))) +
-    annotate('text', x=range_x[1], y=min_y, label=guide_size, vjust=-1)
+    annotate('segment', x=range_x[1], xend=range_x[1]+guide_size,
+             y=min_y, yend=min_y, vjust=1,
+             arrow=arrow(ends="both",angle=90,length=unit(.2,"cm"))) +
+
+    annotate('text', x=range_x[1]+(guide_size/2), y=min_y, label=guide_size, vjust=-.5)
 
   plots = list()
   plots$structure = p + ggtitle(main)
