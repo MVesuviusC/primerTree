@@ -1,0 +1,40 @@
+```{r paper_setup, cache=FALSE, include=FALSE}
+library(knitcitations)
+```
+
+# PrimerTree: Visualizing polymerase chain reaction primer target alignments for environmental sampling #
+# Abstract #
+## Summary ##
+Design and screening of primers is one of the most critical steps in conducting
+any polymerase chain reaction (PCR) analysis.  It is important for the primers
+to be both sensitive and specific to the samples of interest.  Prior tools
+exist for designing primers based on a template and for identifying potential
+target sequences in sequence databases.  However no tool currently exists to
+systematically analyze the diversity of the PCR products. PrimerTree is a
+package which given a set of primers finds all known targets, and generates and
+visualizes a phylogenetic tree of the primer products annotated with the
+taxonomic information of the samples.
+
+## Availability ##
+primerTree is available as a R package under the GPL-2 license available through
+[CRAN](http://cran.r-project.org/web/packages/primerTree/index.html).  Source
+code and developmental versions available at <http://www.github.com/jimhester/primerTree>.
+
+## Contact ##
+[hesterj@ccf.org](mailto:hesterj@ccf.org)
+
+# Introduction #
+TODO
+
+# Implementation #
+TODO
+
+# Results and Discussion #
+TODO
+
+# Conclusions #
+TODO
+
+```{r paper_bibliography, results='asis', echo=F}
+bibliography(style='markdown')
+```
