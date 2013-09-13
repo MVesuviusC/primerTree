@@ -1,5 +1,11 @@
 ```{r paper_setup, cache=FALSE, include=FALSE}
 library(knitcitations)
+# create bibtex entries
+write.bibtex(c(knitr=citation('knitr'),
+               knitcitations=citation('knitcitations'), plyr=citation('plyr'),
+               ggplot2=citation('ggplot2'), ape=citation('ape'),
+               directlabels=citation('directlabels')), file='citations.bib')
+bib = read.bibtex('citations.bib')
 ```
 
 # PrimerTree: Visualizing polymerase chain reaction primer target alignments for metagenomics #
@@ -13,10 +19,9 @@ representative sample of a given population.  Prior tools exist for designing
 primers based on a template and for identifying potential target sequences in
 sequence databases.  However no tool currently exists to systematically analyze
 the diversity of the PCR products, so the scope and precision of the primers
-can be assessed.  PrimerTree is a package which given a set of 
-primers finds all known targets, and generates and visualizes a phylogenetic
-tree of the primer products annotated with the taxonomic information of the
-samples.
+can be assessed.  PrimerTree is a package which given a set of primers finds
+all known targets, and generates and visualizes a phylogenetic tree of the
+primer products annotated with the taxonomic information of the samples.
 
 ## Availability ##
 PrimerTree is available as a R package under the GPL-2 license available through
@@ -45,7 +50,7 @@ background.  Therefore the tools used to design the primers and perform the anal
 must be easy to use and available on a wide variety of systems.
 
 While there exists simple online tools for primer design `r citet('10.1186/1471-2105-13-134')`,
-and primer specificity checking `r citet('10.1385/1-59259-192-2:365')`, there
+and primer specificity checking `r citet(c(primer_BLAST='10.1385/1-59259-192-2:365'))`, there
 are not any currently available easy to use tools to systematically compare
 primer products.  PrimerTree, an R package addresses this need by taking a
 primer pair, generates a phylogenetic tree of the primer products along with
@@ -55,13 +60,64 @@ wide variety of hardware and the entire analysis can be run in only two
 commands, making it accessible to a large audience.
 
 # Implementation #
-TODO
+PrimerTree performs five main functions in analysis of the primer products,
+primer search, taxonomic identification of the sequence, multiple sequence
+alignment of the primer products, construction of a phylogenetic tree, and
+visualization of the tree by taxonomic rank.
 
-# Results and Discussion #
-TODO
+## Primer search ##
+PrimerTree utilizes the primer search implemented in primer-Blast
+`r citet('primer_Blast')` by directly querying the ncbi primer-BLAST search page.
+This allows one to use all of the options available on the native NCBI site.
+By default, PrimerTree searches the NCBI nucleotide database to provide the
+most complete dataset for metagenomic studies.  This is easily changed to any
+database available from NCBI using function options however. The primer
+alignment results are retrieved and parsed, and the primer products
+sequences are retrieved from NCBI's servers using the NCBI E-utilties `r citet('TODO')`.
+
+## Taxonomic identification ##
+NCBI's taxonomy database `r citet('TODO')` provides a full set of taxonomic
+information for all identified samples in their databases.  This information is
+retrieved using the NCBI E-utilities for the samples obtained in the
+primer-BLAST search and stored for later use.
+
+## Multiple sequence alignment ##
+The product sequences are then aligned using clustal omega `r citet('10.1038/msb.2011.75')`.
+Clustal omega is the latest installment of the widely used clustalW2 multiple
+alignment software, and is available as source
+code as well as precompiled binaries for Mac OSX, Windows, Linux and FreeBSD.
+This allows it to be easily installed by any user of PrimerTree.
+
+## Phylogenetic tree construction ##
+The final step in the PrimerTree process is to construct a phylogenetic tree of
+the multiple alignment.  The ape package `r citet('10.1093/bioinformatics/btg412')`
+is used to construct a distance matrix of the sequences, and a neighbor joining
+tree is constructed from the matrix.
+
+## Tree visualization by taxonomic rank ##
+Once the tree is constructed, the tree is visualized along with the main
+taxonomic ranks, coloring by group for each rank by ggplot2 `r citet(bib[['ggplot2']])`.
+Additionally the group name is plotted next to the
+corresponding group using the direct.labels package `r citet(bib[['directlabels']])`.
+Fig. 1 shows an example of the plot produced by the package.
+
+```{r paper_figure_1, dev='svg', echo=F, eval=F}
+library(primerTree)
+trnL = search_primer_pair('GGGCAATCCTGAGCCAA', 'CCATTGAGTCTCTGCACCTATC', name='trnL'))
+plot(trnL)
+```
 
 # Conclusions #
-TODO
+Designing primers for any experiment can be a daunting process, especially so
+if it is a metagenomic experiment.  We have developed the primerTree package
+to help ease this process.  PrimerTree is an R package available on a wide
+variety of platforms and is very simple to use and install.  PrimerTree is
+released under an open-source license and can be downloaded from
+[http://github.com/jimhester/PrimerTree](http://github.com/jimhester/PrimerTree),
+which also provides additional documentation.
+
+## Conflict of Interest ##
+None declared.
 
 ```{r paper_bibliography, results='asis', echo=F}
 bibliography(style='markdown')
