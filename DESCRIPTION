@@ -19,6 +19,7 @@ Depends:
     scales,
     stringr,
     foreach
+LazyData: true
 License: GPL-2
 VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
