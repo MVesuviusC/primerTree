@@ -53,11 +53,17 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500, num_p
                                              .parallel=.parallel,
                                              num_aligns=num_aligns,
                                              ...)
+      start_time = now()
       primer_search$BLAST_result =
         filter_duplicates(ldply(primer_search$response, parse_primer_hits, .parallel=.parallel))
 
-      message(nrow(primer_search$BLAST_result), ' BLAST alignments parsed')
+      message(nrow(primer_search$BLAST_result), ' BLAST alignments parsed in ', seconds_elapsed_text(start_time))
 
+      start_time = now()
+      primer_search$taxonomy = get_taxonomy(primer_search$BLAST_result$gi)
+      message('taxonomy retrieved in ', seconds_elapsed_text(start_time))
+
+      start_time = now()
       primer_search$sequence = get_sequences(primer_search$BLAST_result$gi,
                                              primer_search$BLAST_result$product_start,
                                              primer_search$BLAST_result$product_stop,
@@ -65,24 +71,31 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500, num_p
                                              .parallel=.parallel)
 
       lengths = laply(primer_search$sequence, length)
-      message(length(primer_search$sequence), ' sequences retrieved from NCBI,',
+      message(length(primer_search$sequence), ' sequences retrieved from NCBI',
+              ' in ', seconds_elapsed_text(start_time), ', ',
               ' min:', min(lengths),
               ' mean:', round(mean(lengths),2),
               ' max:', max(lengths))
 
+      start_time = now()
       primer_search$alignment = clustalo(primer_search$sequence, threads=getDoParWorkers())
-      message(nrow(primer_search$alignment), ' sequences aligned',
+      message(nrow(primer_search$alignment), ' sequences aligned in ',
+              seconds_elapsed_text(start_time),
               ' length:', ncol(primer_search$alignment))
 
+      start_time = now()
       primer_search$tree = tree_from_alignment(primer_search$alignment)
-      message('constructed neighbor joining tree')
+      message('constructed neighbor joining tree in ', seconds_elapsed_text(start_time))
 
-      primer_search$taxonomy = get_taxonomy(primer_search$BLAST_result$gi)
       primer_search
     }, default=primer_search)
   )
   class(primer_search) = 'primerTree'
   primer_search
+}
+
+seconds_elapsed_text = function(start_time){
+  paste((start_time %--% now()) %/% seconds(1), 'seconds')
 }
 
 env2list = function(env){
