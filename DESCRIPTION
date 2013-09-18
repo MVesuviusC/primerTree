@@ -7,7 +7,7 @@ Title: PrimerTree
 Description: Query primers and graph their aligned products to
     get a sense of sensitivity and specificity for environmental sampling.
 Depends:
-    R,
+    R (>= 3.0.0),
     XML,
     ape,
     directlabels,
@@ -17,7 +17,8 @@ Depends:
     lubridate,
     plyr,
     scales,
-    stringr
+    stringr,
+    foreach
 License: GPL-2
 VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
