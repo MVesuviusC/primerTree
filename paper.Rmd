@@ -4,7 +4,9 @@ library(knitcitations)
 write.bibtex(c(knitr=citation('knitr'),
                knitcitations=citation('knitcitations'), plyr=citation('plyr'),
                ggplot2=citation('ggplot2'), ape=citation('ape'),
-               directlabels=citation('directlabels')), file='citations.bib')
+               directlabels=citation('directlabels'),
+               plyr=citation('plyr'), foreach=citation('foreach')),
+             file='citations.bib')
 bib = read.bibtex('citations.bib')
 ```
 
@@ -14,14 +16,14 @@ bib = read.bibtex('citations.bib')
 Design and screening of primers is one of the most critical steps in conducting
 any polymerase chain reaction (PCR) analysis.  It is important for the primers
 to amplify correctly and to be both sensitive and specific to the samples of
-interest.  In metagenomic studies it is also important to amplify a
+interest.  In metagenomic studies, it is also important to amplify a
 representative sample of a given population.  Prior tools exist for designing
 primers based on a template and for identifying potential target sequences in
-sequence databases.  However no tool currently exists to systematically analyze
-the diversity of the PCR products, so the scope and precision of the primers
-can be assessed.  PrimerTree is a package which given a set of primers finds
-all known targets, and generates and visualizes a phylogenetic tree of the
-primer products annotated with the taxonomic information of the samples.
+sequence databases.  However, no tool to systematically analyze and visualize
+the sensitivity and specificity of PCR products currently exists. PrimerTree is
+a package which given a set of primers finds all known targets, and generates
+and visualizes a phylogenetic tree of the primer products annotated with the
+taxonomic information of the samples.
 
 ## Availability ##
 PrimerTree is available as a R package under the GPL-2 license available through
@@ -33,30 +35,29 @@ code and developmental versions available at <http://www.github.com/jimhester/pr
 
 # Introduction #
 Designing primers for PCR is a common task widely used in biomedical research,
-forensic science and recently, metagenomics `r citet(c('10.1371/journal.pbio.0050082'))`.
-There are a number of important factors to consider in designing primers which
-will correctly amplify the target of interest.  First chemical properties of
-the primers themselves must be considered, including length, melting
+forensic science and recently, metagenomics. `r #citep(c('10.1371/journal.pbio.0050082'))`.
+There are a number of important factors to consider in designing primers that
+will correctly amplify the target of interest.  First one must consider the chemical properties of
+the primers themselves, including length, melting
 temperature, GC content, secondary structure and the likelihood of primer dimer
 formation.  In addition, the primer must be specific to the target of interest
 and must not produce off target products.  Metagenomic studies must design
-primers which amplify a representative subset of the species of interest, while
-not amplifying those species which are unrelated.  If the primer products are
-to be sequenced, the primer products must carry enough differences to be
-identifiable and distinct.
+primers that amplify a representative subset of the species of interest, while
+not amplifying unrelated species.  If the primer products are
+sequenced, they must carry enough differences to be identifiable and distinct.
 
-Primer design is often carried out by researchers without a strong computational
-background.  Therefore the tools used to design the primers and perform the analysis
+Researchers without a strong computational background often carry out primer design.
+Therefore, the tools used to design the primers and perform the analysis
 must be easy to use and available on a wide variety of systems.
 
-While there exists simple online tools for primer design `r citet('10.1186/1471-2105-13-134')`,
-and primer specificity checking `r citet(c(primer_BLAST='10.1385/1-59259-192-2:365'))`, there
+While there exists simple online tools for primer design `r citep('10.1093/nar/gks596')`,
+and primer specificity checking `r citep(c(primer_BLAST='10.1186/1471-2105-13-134'))`, there
 are not any currently available easy to use tools to systematically compare
 primer products.  PrimerTree, an R package addresses this need by taking a
 primer pair, generates a phylogenetic tree of the primer products along with
 their taxonomic classification.  This gives the researcher a good idea of the
 scope and sensitivity of the primers.  Because it is an R package, it runs on a
-wide variety of hardware and the entire analysis can be run in only two
+wide variety of hardware.  The entire analysis can run in only two
 commands, making it accessible to a large audience.
 
 # Implementation #
@@ -66,59 +67,88 @@ alignment of the primer products, construction of a phylogenetic tree, and
 visualization of the tree by taxonomic rank.
 
 ## Primer search ##
-PrimerTree utilizes the primer search implemented in primer-Blast
-`r citet('primer_Blast')` by directly querying the ncbi primer-BLAST search page.
-This allows one to use all of the options available on the native NCBI site.
-By default, PrimerTree searches the NCBI nucleotide database to provide the
-most complete dataset for metagenomic studies.  This is easily changed to any
-database available from NCBI using function options however. The primer
-alignment results are retrieved and parsed, and the primer products
-sequences are retrieved from NCBI's servers using the NCBI E-utilties `r citet('TODO')`.
+PrimerTree utilizes the primer search implemented in Primer-BLAST
+`r citep('primer_BLAST')` by directly querying the National Center for
+Biotechnology Information (NCBI) Primer-BLAST search page. This allows one to
+use all the options available on the native NCBI site. By default, PrimerTree
+searches the NCBI nucleotide database to provide the most complete dataset for
+metagenomic studies.  Alternative NCBI databases are available through the
+function options if necessary.  The primer alignment results are retrieved and
+parsed, and the primer product's sequences retrieved from NCBI's servers using
+the NCBI E-utilties.
+`r citep('http://www.ncbi.nlm.nih.gov/books/NBK25500/')`.
 
 ## Taxonomic identification ##
-NCBI's taxonomy database `r citet('TODO')` provides a full set of taxonomic
-information for all identified samples in their databases.  This information is
-retrieved using the NCBI E-utilities for the samples obtained in the
-primer-BLAST search and stored for later use.
+NCBI's taxonomy database `r citep('http://www.ncbi.nlm.nih.gov/books/NBK21100/')`
+provides a full set of taxonomic information for all identified samples in
+their databases.  Primer-BLAST retrieves this information for the samples
+obtained in the Primer-BLAST search using NCBI E-Utilitiles and the results are
+stored for later use.
 
 ## Multiple sequence alignment ##
-The product sequences are then aligned using clustal omega `r citet('10.1038/msb.2011.75')`.
-Clustal omega is the latest installment of the widely used clustalW2 multiple
+Next, Clustal Omega constructs the aligment of primer product sequences `r citep('10.1038/msb.2011.75')`.
+Clustal Omega is the latest installment of the widely used ClustalW2 multiple
 alignment software, and is available as source
 code as well as precompiled binaries for Mac OSX, Windows, Linux and FreeBSD.
-This allows it to be easily installed by any user of PrimerTree.
+This allows easy installation of Clustal Omega by any user of PrimerTree.  This
+alignment is then used to construct a phylogenetic tree.
 
 ## Phylogenetic tree construction ##
 The final step in the PrimerTree process is to construct a phylogenetic tree of
-the multiple alignment.  The ape package `r citet('10.1093/bioinformatics/btg412')`
-is used to construct a distance matrix of the sequences, and a neighbor joining
-tree is constructed from the matrix.
+the multiple alignment.  A distance matrix of the sequences is calculated and a
+neighbor-joining tree constructed using the ape package `r citep('10.1093/bioinformatics/btg412')`.
+The tree and the previously retrieved taxonomic ranks can then be visualized.
+
 
 ## Tree visualization by taxonomic rank ##
-Once the tree is constructed, the tree is visualized along with the main
-taxonomic ranks, coloring by group for each rank by ggplot2 `r citet(bib[['ggplot2']])`.
-Additionally the group name is plotted next to the
-corresponding group using the direct.labels package `r citet(bib[['directlabels']])`.
-Fig. 1 shows an example of the plot produced by the package.
-
-```{r paper_figure_1, dev='svg', echo=F, eval=F}
+PrimerTree then visualizes the tree, coloring the main taxonomic ranks using
+the ggplot2 package, then adds group names to the colored ranks using the
+directlabels package `r citep(c(bib[['ggplot2']], bib[['directlabels']]))`.
+Fig. 1 shows an example of commonly used universal primers from the chloroplast trnL gene.
+`r citep('10.1093/nar/gkl938')`
+```{r figure_1, dev='png', dpi=300, fig.cap='Fig. 1 - PrimerTree results from universal primers for the chloroplast trnL gene', echo=F}
 library(primerTree)
-trnL = search_primer_pair('GGGCAATCCTGAGCCAA', 'CCATTGAGTCTCTGCACCTATC', name='trnL'))
 plot(trnL)
 ```
 
+# Runtime notes #
+In the simple case of the trnL primer pair having no degenerate primers and
+using a single thread, primer alignment takes about 120 seconds, retrieval of
+taxonomic information takes about 10 seconds, retrieval of primer product
+sequences takes about 100 seconds, multiple alignment takes about 3 seconds,
+and tree layout and printing takes about 2 seconds.  The entire analysis is
+completed in under 240 seconds.
+
+The runtime for the analysis varies greatly based on the parameters
+chosen as well as the specificity of the primers.  Highly
+degenerate primer pairs result in a large number of possible permutations to
+submit to Primer-BLAST, which can increase the runtime considerably.  In an
+effort to limit runtime in this situation, PrimerTree randomly samples only a
+portion of the total primer permutations, which for most cases still gives a
+useful result.  Changing the number of sampled permutations or turning off
+sampling completely is possible using function options however.
+
+PrimerTree uses the plyr package extensively, so has full support any of the
+parallel backends compatible with the foreach package
+`r citep(bib[['plyr']], bib[['foreach']])`.  parallel retrieval of the primer
+sequences from NCBI in particular speeds up the total runtime considerably.
+Note that parallel queries to Primer-BLAST are queued by NCBI's servers and
+only processed once there is free compute time.
+
 # Conclusions #
-Designing primers for any experiment can be a daunting process, especially so
-if it is a metagenomic experiment.  We have developed the primerTree package
-to help ease this process.  PrimerTree is an R package available on a wide
-variety of platforms and is very simple to use and install.  PrimerTree is
-released under an open-source license and can be downloaded from
+Designing primers for any experiment can be a daunting challenge, especially so
+if it is a metagenomic study.  We have developed the primerTree package to help
+visualize the sensitivity and specificity of the primers chosen. PrimerTree is
+an R package available on a wide variety of platforms and is very simple to use
+and install.  PrimerTree is released under an open-source license and can be
+downloaded from
 [http://github.com/jimhester/PrimerTree](http://github.com/jimhester/PrimerTree),
 which also provides additional documentation.
 
 ## Conflict of Interest ##
 None declared.
 
+# References #
 ```{r paper_bibliography, results='asis', echo=F}
 bibliography(style='markdown')
 ```
