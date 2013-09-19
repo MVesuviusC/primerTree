@@ -67,9 +67,15 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
 common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "species")
 
 layout_tree_ape = function(tree, ...){
-  pdf(file='/dev/null') #hack to write no output
+  #hack to write no output
+  cur_dev = dev.cur() #store previous dev
+  temp_file = tempfile()
+  pdf(file=temp_file)
   plot.phylo(tree, plot=F, ...)
   dev.off()
+  unlink(temp_file)
+  dev.set(cur_dev) #restore previous dev
+
   last = .PlotPhyloEnv$last_plot.phylo
   new = list()
   new$edge$x = last$xx[last$edge[,1]]
