@@ -94,6 +94,7 @@ BLAST_primer = function(forward, reverse, ..., organism='',
   options = list(..., primer_left_input=forward, primer_right_input=reverse,
                  organism=organism,
                  primer_specificity_database=primer_specificity_database,
+                 exclude_env=exclude_env,
                  search_specific_primer='on')
 
   names(options) = toupper(names(options))
