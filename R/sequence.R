@@ -22,7 +22,7 @@ get_sequence = function(gi, start=NULL, stop=NULL){
   if(!is.null(stop))
     query$seq_stop = stop
 
-  response = POST(fetch_url, body=query)
+  response = POST_retry(fetch_url, body=query)
 
   #stop if response failed
   stop_for_status(response)

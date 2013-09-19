@@ -78,9 +78,7 @@ BLAST_primer = function(forward, reverse, ..., organism='',
   primer_specificity_database='nt', exclude_env='on'){
 
   url = 'http://www.ncbi.nlm.nih.gov/tools/primer-blast/'
-  form = GET(url)
-
-  stop_for_status(form)
+  form = GET_retry(url)
 
   content = parsable_html(form)
 
@@ -112,17 +110,14 @@ BLAST_primer = function(forward, reverse, ..., organism='',
   start_time = now()
 
   message('Submitting Primer-BLAST query')
-  response = POST(paste(url, 'primertool.cgi', sep=''), body=options)
-
-  stop_for_status(response)
+  response = POST_retry(paste(url, 'primertool.cgi', sep=''), body=options)
 
   values = get_refresh_from_meta(response)
 
   while(length(values) > 0){
     message('BLAST alignment processing, refreshing in ', values[1], ' seconds...')
     Sys.sleep(values[1])
-    response = GET(values[2])
-    stop_for_status(response)
+    response = GET_retry(values[2])
 
     values = get_refresh_from_meta(response)
   }
@@ -130,6 +125,25 @@ BLAST_primer = function(forward, reverse, ..., organism='',
   message('BLAST alignment completed in ', total_time %/% seconds(1), ' seconds')
   response
 }
+
+#modify a function to check the status and retry until success
+retry = function(fun, num_retry=5, ...){
+  function(...){
+    res = fun(...)
+    itr = 0
+    status = http_status(res)
+    while(itr < num_retry && inherits(res, 'response') && status$category != "success"){
+      warning('request failed, retry attempt', itr+1)
+      res = fun(...)
+      status = http_status(res)
+      itr = itr + 1
+    }
+    res
+  }
+}
+
+GET_retry = retry(GET)
+POST_retry = retry(POST)
 
 parse_primer_hits = function(response){
   content = parsable_html(response)

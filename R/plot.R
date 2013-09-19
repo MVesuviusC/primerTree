@@ -1,18 +1,6 @@
-#' plots a tree with colored and labeled points
-#'
-#' @param tree to be plotted, use layout_tree to layout tree.
-#' @param taxonomy A data.frame with an accession field corresponding to the
-#'        tree tip labels.
-#' @param main An optional title for the plot
-#' @param type The type of tree to plot, default unrooted.
+#' plots a tree along with a series of taxonomic ranks
 #' @param ranks The ranks to include, defaults to all common ranks, if null print all ranks.
-#' @param size The size of the colored points
-#' @param guide_size The size of the length guide.  If NULL auto detects a
-#'        reasonable size.
-#' @param legend_cutoff The number of different taxa names after which the
-#'        names are no longer printed.
-#' @param ... additional arguments passed to layout_tree_ape
-#' @return plot to be printed.
+#' @inheritParams plot_tree
 #' @export plot_tree_ranks
 
 plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
@@ -21,9 +9,40 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
   if(is.null(ranks))
     ranks = setdiff(names(taxonomy), c('accession', 'gi', 'taxId'))
 
-  x = layout_tree_ape(tree, type=type, ...)
+  plots = list()
+  plots$structure = plot_tree(tree, main=main, guide_size=guide_size, type=type, ...)
 
-  x$tip = merge(x$tip, taxonomy, by.x='label', by.y='gi', all.x=T)
+  for(rank in intersect(ranks, names(taxonomy))){
+    if(length(na.omit(taxonomy[rank])) > 0){
+      plots[[rank]]= plot_tree(tree, guide_size=guide_size, type=type, rank=rank, taxonomy=taxonomy, size=size, legend_cutoff=legend_cutoff, ...)
+    }
+  }
+  p = do.call(arrangeGrob, plots)
+  p
+}
+common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "species")
+
+#' plots a tree, optionally with colored and labeled points by taxonomic rank
+#'
+#' @param tree to be plotted, use layout_tree to layout tree.
+#' @param taxonomy A data.frame with an accession field corresponding to the
+#'        tree tip labels.
+#' @param main An optional title for the plot
+#' @param type The type of tree to plot, default unrooted.
+#' @param rank The rank to include, if null only the tree is plotted
+#' @param size The size of the colored points
+#' @param guide_size The size of the length guide.  If NULL auto detects a
+#'        reasonable size.
+#' @param legend_cutoff The number of different taxa names after which the
+#'        names are no longer printed.
+#' @param ... additional arguments passed to layout_tree_ape
+#' @return plot to be printed.
+#' @export plot_tree
+
+plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
+                     rank=NULL, taxonomy=NULL,  size=2, legend_cutoff=25, ...){
+
+  x = layout_tree_ape(tree, type=type, ...)
 
   range_x = range(x$edge$x, x$tip$x)
   min_y = expand_range(range(x$edge$y, x$tip$y), mul=.1)[1]
@@ -40,31 +59,30 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
 
     annotate('text', x=range_x[1]+(guide_size/2), y=min_y, label=guide_size, vjust=-.5)
 
-  plots = list()
-  plots$structure = p + ggtitle(main)
+  if(!is.null(rank)){
+    if(is.null(taxonomy))
+      stop('Must provide a taxonomy if plotting a rank')
 
-  smart.grid2 = list('get.means', 'calc.boxes', 'empty.grid')
-  for(rank in intersect(ranks, names(taxonomy))){
-    rows = na.omit(x$tip[, c(rank, 'x', 'y')])
-    if(nrow(rows) > 0){
-      plots[[rank]]=
-      p+geom_point(data=rows,
-                   aes_string(x='x', y='y', color=rank), size=size, na.rm=T) +
-        ggtitle(rank) + scale_x_continuous(expand=c(.1,0)) +
-        scale_y_continuous(expand=c(.1, 0)) + theme(legend.position='none')
+    if(is.null(main))
+      main = rank
 
-      if(length(unique(rows[[rank]])) < legend_cutoff){
-        plots[[rank]] = plots[[rank]] +
-        geom_dl(data=rows, method=smart.grid2,
-                aes_string(x='x', y='y', color=rank, label=rank))
-      }
-    }
+      x$tip = merge(x$tip, taxonomy, by.x='label', by.y='gi', all.x=T)
+
+      rows = na.omit(x$tip[, c('x','y',rank)])
+      p =
+        p+geom_point(data=rows,
+                     aes_string(x='x', y='y', color=rank), size=size, na.rm=T) +
+          scale_x_continuous(expand=c(.1,0)) +
+          scale_y_continuous(expand=c(.1, 0)) + theme(legend.position='none')
+
+        if(length(unique(rows[[rank]])) < legend_cutoff){
+          smart.grid2 = list('get.means', 'calc.boxes', 'empty.grid')
+          p = p + geom_dl(data=rows, method=smart.grid2,
+                    aes_string(x='x', y='y', color=rank, label=rank))
+        }
   }
-  p = do.call(arrangeGrob, plots)
-  p
+  p + ggtitle(main)
 }
-
-common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "species")
 
 layout_tree_ape = function(tree, ...){
   #hack to write no output

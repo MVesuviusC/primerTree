@@ -27,7 +27,7 @@ gi2taxid = function(gi){
   names(gi) = rep('id', times=length(gi))
   query=c(list(db='taxonomy', dbfrom='nuccore'), gi)
 
-  response=POST(url, body=query)
+  response=POST_retry(url, body=query)
 
   #stop if response failed
   stop_for_status(response)
@@ -54,7 +54,7 @@ accession2gi = function(accession){
   url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
   query=list(db='nuccore', rettype='seqid', id=paste(collapse=',', accession))
 
-  response=POST(url, body=query)
+  response=POST_retry(url, body=query)
 
   #stop if response failed
   stop_for_status(response)
@@ -73,7 +73,7 @@ fetch_taxonomy = function(taxid) {
 
   query=list(db='taxonomy', rettype='null', retmode='xml', id=paste(taxid, collapse=','))
 
-  response = POST(fetch_url, body=query)
+  response = POST_retry(fetch_url, body=query)
 
   #stop if response failed
   stop_for_status(response)
