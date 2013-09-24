@@ -48,7 +48,7 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
   x = layout_tree_ape(tree, type=type, ...)
 
   range_x = range(x$edge$x, x$tip$x)
-  min_y = expand_range(range(x$edge$y, x$tip$y), mul=.1)[1]
+  range_y = expand_range(range(x$edge$y, x$tip$y), mul=.1)
 
   if(is.null(guide_size)){
     guide_size = 10**(round_any(log10(range_x[2]-range_x[1]), 1)-1)
@@ -57,10 +57,9 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
    geom_segment(data=x$edge, aes(x=x, y=y, xend=xend, yend=yend)) +
     theme_noaxis() +
     annotate('segment', x=range_x[1], xend=range_x[1]+guide_size,
-             y=min_y, yend=min_y, vjust=1,
+             y=range_y[1], yend=range_y[1], vjust=1,
              arrow=arrow(ends="both",angle=90,length=unit(.2,"cm"))) +
-
-    annotate('text', x=range_x[1]+(guide_size/2), y=min_y, label=guide_size, vjust=-.5)
+    annotate('text', x=range_x[1]+(guide_size/2), y=range_y[1], label=guide_size, vjust=-.5)
 
   if(!is.null(rank)){
     if(is.null(taxonomy))
@@ -84,7 +83,7 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
                     aes_string(x='x', y='y', color=rank, label=rank))
         }
   }
-  p + ggtitle(main)
+  p + ggtitle(main) + ylim(range_y) + xlim(range_x)
 }
 
 layout_tree_ape = function(tree, ...){
@@ -125,7 +124,8 @@ layout_tree_ape = function(tree, ...){
 theme_noaxis = function(){
   theme(panel.border=element_blank(), panel.grid=element_blank(),
         axis.line=element_blank(), axis.text=element_blank(),
-        axis.title=element_blank(), axis.ticks=element_blank())
+        axis.title=element_blank(), axis.ticks=element_blank(),
+        plot.margin=unit(c(0, 0, -1, -1), 'lines'))
 }
 
 round_any = function(x, accuracy, f=round){
