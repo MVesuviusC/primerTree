@@ -1,3 +1,6 @@
+#PrimerTree
+#Copyright (C) 2013 Jim Hester
+
 #' Retrieve the taxonomy information from NCBI for a set of nucleotide gis.
 #'
 #' @param gis a character vector of the gis to retrieve

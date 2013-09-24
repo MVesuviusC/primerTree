@@ -1,3 +1,6 @@
+#PrimerTree
+#Copyright (C) 2013 Jim Hester
+
 #' Retrieves a fasta sequence from NCBI nucleotide database.
 #'
 #' @param gi nucleotide gi to retrieve.

@@ -1,3 +1,6 @@
+#PrimerTree
+#Copyright (C) 2013 Jim Hester
+
 #' Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac
 #'
 #' ambiguity codes, enumerate all possible combinations and combine the

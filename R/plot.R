@@ -1,3 +1,6 @@
+#PrimerTree
+#Copyright (C) 2013 Jim Hester
+
 #' plots a tree along with a series of taxonomic ranks
 #' @param ranks The ranks to include, defaults to all common ranks, if null print all ranks.
 #' @inheritParams plot_tree
