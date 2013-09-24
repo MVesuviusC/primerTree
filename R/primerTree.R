@@ -26,8 +26,16 @@ content.primerTree = function(x, ...){
 #'        names are no longer printed.
 #' @param ... additional arguments passed to plot_tree_ranks
 #' @export plot.primerTree
-plot.primerTree = function(x, ...){
-  plot_tree_ranks(x$tree, x$taxonomy, x$name, ...)
+plot.primerTree = function(x, ranks=NULL, ...){
+  if(is.null(ranks)){
+    plot_tree_ranks(x$tree, x$taxonomy, x$name, ...)
+  }
+  else if(length(ranks) > 1){
+    plot_tree_ranks(x$tree, x$taxonomy, x$name, ranks=ranks, ...)
+  }
+  else {
+    plot_tree(x$tree, taxonomy=x$taxonomy, rank=ranks, ...)
+  }
 }
 #' Automatic primer searching'
 #' @param name name to give to the primer pair
