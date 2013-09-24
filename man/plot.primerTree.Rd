@@ -2,7 +2,7 @@
 \alias{plot.primerTree}
 \title{plot function for a primerTree object, calls plot_tree_ranks}
 \usage{
-  plot.primerTree(x, ...)
+  plot.primerTree(x, ranks = NULL, ...)
 }
 \arguments{
   \item{primerTree}{object to plot}

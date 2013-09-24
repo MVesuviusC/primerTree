@@ -1,15 +1,12 @@
-\name{plot_tree_ranks}
-\alias{plot_tree_ranks}
-\title{plots a tree along with a series of taxonomic ranks}
+\docType{data}
+\name{common_ranks}
+\alias{common_ranks}
+\title{plots a tree, optionally with colored and labeled points by taxonomic rank}
+\format{chr [1:7] "kingdom" "phylum" "class" "order" "family" "genus" "species"}
 \usage{
-  plot_tree_ranks(tree, taxonomy, main = NULL,
-    type = "unrooted", ranks = common_ranks, size = 2,
-    guide_size = NULL, legend_cutoff = 25, ...)
+  common_ranks
 }
 \arguments{
-  \item{ranks}{The ranks to include, defaults to all common
-  ranks, if null print all ranks.}
-
   \item{tree}{to be plotted, use layout_tree to layout
   tree.}
 
@@ -19,6 +16,9 @@
   \item{main}{An optional title for the plot}
 
   \item{type}{The type of tree to plot, default unrooted.}
+
+  \item{rank}{The rank to include, if null only the tree is
+  plotted}
 
   \item{size}{The size of the colored points}
 
@@ -31,7 +31,12 @@
   \item{...}{additional arguments passed to
   layout_tree_ape}
 }
-\description{
-  plots a tree along with a series of taxonomic ranks
+\value{
+  plot to be printed.
 }
+\description{
+  plots a tree, optionally with colored and labeled points
+  by taxonomic rank
+}
+\keyword{datasets}
 

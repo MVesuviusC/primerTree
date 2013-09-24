@@ -10,8 +10,6 @@
 \arguments{
   \item{name}{name to give to the primer pair}
 
-  \item{num_aligns}{number of alignment results to keep}
-
   \item{simplify}{use simple names for primer hit results
   or complex}
 
@@ -23,6 +21,13 @@
 
   \item{reverse}{reverse primer to search by 5'-3' on minus
   strand}
+
+  \item{num_aligns}{number of alignment results to keep}
+
+  \item{num_permutations}{the number of primer permutations
+  to search, if the degenerate bases cause more than this
+  number of permutations to exist, this number will be
+  sampled from all possible permutations.}
 
   \item{.parallel}{if 'TRUE', perform in parallel, using
   parallel backend provided by foreach}
