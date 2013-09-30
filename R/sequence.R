@@ -89,7 +89,9 @@ tree_from_alignment = function(dna, ...){
 }
 #' Multiple sequence alignment with clustal omega
 #'
-#' Calls clustal omega to align a set of sequences of class DNAbin.
+#' Calls clustal omega to align a set of sequences of class DNAbin.  Run
+#' without any arguments to see all the options you can pass to the command
+#' line clustal omega.
 #' @param x an object of class 'DNAbin'
 #' @param exec a character string with the name or path to the program
 #' @param quiet whether to supress output to stderr or stdout

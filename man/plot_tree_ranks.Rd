@@ -29,9 +29,19 @@
   after which the names are no longer printed.}
 
   \item{...}{additional arguments passed to
-  layout_tree_ape}
+  \code{\link{layout_tree_ape}}}
 }
 \description{
   plots a tree along with a series of taxonomic ranks
+}
+\examples{
+#plot all the common ranks
+plot_tree_ranks(mammals_16S)
+#plot specific ranks, with a larger dot size
+plot_tree_ranks(mammals_16S, ranks=c('kingdom', 'class', 'family'), size=3)
+}
+\seealso{
+  \code{\link{plot_tree}} to plot only a single rank or the
+  just the tree layout.
 }
 

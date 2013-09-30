@@ -136,7 +136,7 @@ retry = function(fun, num_retry=5, ...){
     itr = 0
     status = http_status(res)
     while(itr < num_retry && inherits(res, 'response') && status$category != "success"){
-      warning('request failed, retry attempt', itr+1)
+      warning('request failed, retry attempt ', itr+1)
       res = fun(...)
       status = http_status(res)
       itr = itr + 1

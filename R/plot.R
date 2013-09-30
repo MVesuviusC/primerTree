@@ -4,8 +4,13 @@
 #' plots a tree along with a series of taxonomic ranks
 #' @param ranks The ranks to include, defaults to all common ranks, if null print all ranks.
 #' @inheritParams plot_tree
+#' @seealso \code{\link{plot_tree}} to plot only a single rank or the just the tree layout.
 #' @export plot_tree_ranks
-
+#' @examples
+#' #plot all the common ranks
+#' plot_tree_ranks(mammals_16S)
+#' #plot specific ranks, with a larger dot size
+#' plot_tree_ranks(mammals_16S, ranks=c('kingdom', 'class', 'family'), size=3)
 plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
                       ranks=common_ranks,  size=2,
                                     guide_size=NULL, legend_cutoff=25, ...){
@@ -38,7 +43,7 @@ common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "spec
 #'        reasonable size.
 #' @param legend_cutoff The number of different taxa names after which the
 #'        names are no longer printed.
-#' @param ... additional arguments passed to layout_tree_ape
+#' @param ... additional arguments passed to \code{\link{layout_tree_ape}}
 #' @return plot to be printed.
 #' @export plot_tree
 
@@ -48,7 +53,7 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
   x = layout_tree_ape(tree, type=type, ...)
 
   range_x = range(x$edge$x, x$tip$x)
-  range_y = expand_range(range(x$edge$y, x$tip$y), mul=.1)
+  range_y = expand_range(range(x$edqe$y, x$tip$y), mul=.1)
 
   if(is.null(guide_size)){
     guide_size = 10**(round_any(log10(range_x[2]-range_x[1]), 1)-1)
@@ -71,11 +76,8 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
       x$tip = merge(x$tip, taxonomy, by.x='label', by.y='gi', all.x=T)
 
       rows = na.omit(x$tip[, c('x','y',rank)])
-      p =
-        p+geom_point(data=rows,
-                     aes_string(x='x', y='y', color=rank), size=size, na.rm=T) +
-          scale_x_continuous(expand=c(.1,0)) +
-          scale_y_continuous(expand=c(.1, 0)) + theme(legend.position='none')
+      p = p+geom_point(data=rows, aes_string(x='x', y='y', color=rank),
+                     size=size, na.rm=T) + theme(legend.position='none')
 
         if(length(unique(rows[[rank]])) < legend_cutoff){
           smart.grid2 = list('get.means', 'calc.boxes', 'empty.grid')
@@ -83,7 +85,7 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
                     aes_string(x='x', y='y', color=rank, label=rank))
         }
   }
-  p + ggtitle(main) + ylim(range_y) + xlim(range_x)
+  p + ggtitle(main)
 }
 
 layout_tree_ape = function(tree, ...){

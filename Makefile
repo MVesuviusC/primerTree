@@ -3,7 +3,7 @@ all: install
 install: R_package
 
 R_package: $(BASE)
-	Rscript -e 'library(devtools);install(".", quick=T)'
+	Rscript -e 'library(devtools);install(".")'
 	touch R_package
 
 make clean:

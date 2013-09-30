@@ -38,6 +38,7 @@ Using the parallel features with the multicore package using the doMC backend, w
 library(doMC)
 registerDoMC(8)
 library(primerTree)
-mammals_16S = search_primer_pair(name='Mammals 16S', 'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT', .parallel=T)
+mammals_16S = search_primer_pair(name='Mammals 16S',
+  'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT', .parallel=T)
 plot(mammals_16S)
 ```

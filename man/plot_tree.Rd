@@ -29,7 +29,7 @@
   after which the names are no longer printed.}
 
   \item{...}{additional arguments passed to
-  layout_tree_ape}
+  \code{\link{layout_tree_ape}}}
 }
 \value{
   plot to be printed.

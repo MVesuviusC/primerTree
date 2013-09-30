@@ -1,9 +1,0 @@
-```{r example_search}
-#parallel version
-library(doMC)
-library(primer)
-registerDoMC(8)
-
-system.time({trnL = search_primer('GGGCAATCCTGAGCCAA', 'CCATTGAGTCTCTGCACCTATC', name='trnL', .parallel=T)})
-system.time(print(plot(trnL)))
-```
