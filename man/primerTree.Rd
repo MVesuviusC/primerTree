@@ -1,0 +1,14 @@
+\docType{package}
+\name{primerTree}
+\alias{primerTree}
+\alias{primerTree-package}
+\title{\pkg{primerTree} Visually Assessing the Specificity and Informativeness of Primer Pairs}
+\description{
+  \code{primerTree} has two main commands:
+  \code{\link{search_primer_pair}} which takes a primer
+  pair and returns an primerTree object of the search
+  results \code{\link{plot.primerTree}} a S3 method for
+  plotting the primerTree object obtained using
+  \code{\link{search_primer_pair}}
+}
+

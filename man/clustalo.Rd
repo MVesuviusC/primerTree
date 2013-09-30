@@ -16,6 +16,9 @@
 
   \item{original.ordering}{use the original ordering of the
   sequences}
+
+  \item{...}{additional arguments passed to the command
+  line clustalo}
 }
 \description{
   Calls clustal omega to align a set of sequences of class

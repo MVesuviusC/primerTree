@@ -1,3 +1,4 @@
+BASE=$(wildcard R/*R)
 all: install
 
 install: R_package

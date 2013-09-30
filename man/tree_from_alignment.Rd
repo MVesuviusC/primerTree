@@ -14,6 +14,6 @@
   Construct a neighbor joining tree from a dna alignment
 }
 \seealso{
-  \code{\link{ape::dist.dna}}, \code{\link{ape::nj}}
+  \code{\link{dist.dna}}, \code{\link{nj}}
 }
 

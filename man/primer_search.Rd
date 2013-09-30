@@ -20,6 +20,8 @@
   number of permutations to exist, this number will be
   sampled from all possible permutations.}
 
+  \item{...}{additional arguments passed to Primer-Blast}
+
   \item{.parallel}{if 'TRUE', perform in parallel, using
   parallel backend provided by foreach}
 

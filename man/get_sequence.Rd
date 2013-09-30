@@ -10,8 +10,8 @@
   \item{start}{start base to retrieve, numbered beginning
   at 1.  If NULL the beginning of the sequence.}
 
-  \item{end}{end base to retrieve, numbered beginning at 1.
-  if NULL the end of the sequence.}
+  \item{stop}{last base to retrieve, numbered beginning at
+  1. if NULL the end of the sequence.}
 }
 \value{
   an ape::DNAbin object.
@@ -20,6 +20,6 @@
   Retrieves a fasta sequence from NCBI nucleotide database.
 }
 \seealso{
-  \code{\link{ape::DNAbin}}
+  \code{\link{DNAbin}}
 }
 

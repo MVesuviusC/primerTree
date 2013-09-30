@@ -8,9 +8,9 @@
 #' @export plot_tree_ranks
 #' @examples
 #' #plot all the common ranks
-#' plot_tree_ranks(mammals_16S)
+#' plot_tree_ranks(mammals_16S$tree, mammals_16S$taxonomy)
 #' #plot specific ranks, with a larger dot size
-#' plot_tree_ranks(mammals_16S, ranks=c('kingdom', 'class', 'family'), size=3)
+#' plot_tree_ranks(mammals_16S$tree, mammals_16S$taxonomy, ranks=c('kingdom', 'class', 'family'), size=3)
 plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
                       ranks=common_ranks,  size=2,
                                     guide_size=NULL, legend_cutoff=25, ...){
@@ -59,7 +59,7 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
     guide_size = 10**(round_any(log10(range_x[2]-range_x[1]), 1)-1)
   }
   p = ggplot() +
-   geom_segment(data=x$edge, aes(x=x, y=y, xend=xend, yend=yend)) +
+   geom_segment(data=x$edge, aes_string(x='x', y='y', xend='xend', yend='yend')) +
     theme_noaxis() +
     annotate('segment', x=range_x[1], xend=range_x[1]+guide_size,
              y=range_y[1], yend=range_y[1], vjust=1,
@@ -88,6 +88,12 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
   p + ggtitle(main)
 }
 
+#' layout a tree using ape, return an object to be plotted by \code{\link{plot_tree}}
+#' @param tree The \code{\link{phylo}} tree to be plotted
+#' @param ... additional arguments to \code{\link{plot.phylo}}
+#' @return \item{name edge}{description list of x, y and xend, yend coordinates as well as ids for the edges}
+#' \item{name tips}{description list of x, y, label and id for the tips}
+#' \item{name nodes}{description list of x, y and id for the nodes}
 layout_tree_ape = function(tree, ...){
   #hack to write no output
   cur_dev = dev.cur() #store previous dev

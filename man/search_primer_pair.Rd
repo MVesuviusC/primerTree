@@ -16,7 +16,7 @@ a multiple alignment of the products}
   or complex}
 
   \item{.progress}{name of the progress bar to use, see
-  \code{\link{plyr::create_progress_bar}}}
+  \code{\link{create_progress_bar}}}
 
   \item{clustal_options}{a list of options to pass to
   clustal omega, run \code{link{clustalo}} for a list of
@@ -35,6 +35,8 @@ a multiple alignment of the products}
   number of permutations to exist, this number will be
   sampled from all possible permutations.}
 
+  \item{...}{additional arguments passed to Primer-Blast}
+
   \item{.parallel}{if 'TRUE', perform in parallel, using
   parallel backend provided by foreach}
 }
@@ -42,7 +44,7 @@ a multiple alignment of the products}
   A list with the following elements, \item{name
   name}{description name of the primer pair} \item{name
   BLAST_result}{description html blast results from
-  Primer-BLAST as 'a \code{\link{httr::response}}} object.
+  Primer-BLAST as 'a \code{\link{response}}} object.
   \item{name taxonomy}{description taxonomy for the primer
   products from NCBI} \item{name sequence}{description
   sequence of the primer products} \item{name

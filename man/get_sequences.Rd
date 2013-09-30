@@ -3,10 +3,11 @@
 \title{Retrieves fasta sequences from NCBI nucleotide database.}
 \usage{
   get_sequences(gi, start = NULL, stop = NULL,
-    simplify = TRUE, ..., .parallel = FALSE,
-    .progress = "none")
+    simplify = TRUE, .parallel = FALSE, .progress = "none")
 }
 \arguments{
+  \item{gi}{the gi number of the sequence to retrieve}
+
   \item{start}{start bases to retrieve, numbered beginning
   at 1.  If NULL the beginning of the sequence.}
 
@@ -23,12 +24,12 @@
   'plyr::create_progress_bar'}
 }
 \value{
-  an ape::DNAbin object.
+  an DNAbin object.
 }
 \description{
   Retrieves fasta sequences from NCBI nucleotide database.
 }
 \seealso{
-  \code{\link{ape::DNAbin}}
+  \code{\link{DNAbin}}
 }
 

@@ -11,6 +11,7 @@
 #' @param num_permutations the number of primer permutations to search, if the degenerate bases
 #'        cause more than this number of permutations to exist, this number will be
 #'        sampled from all possible permutations.
+#' @param ... additional arguments passed to Primer-Blast
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
 #'        provided by foreach
 #' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
@@ -70,8 +71,8 @@ enumerate_ambiguity = function(sequence){
 
 print_options = function(options){
   output = capture.output( print(
-                                 subset(options, is.na(type) | type != 'hidden',
-                                        select=c(name, type, defval)), row.names=F)
+                                 options[ is.na(options$type) | options$type != 'hidden',
+                                        c('name', 'type', 'defval') ])
                           )
 
   message(paste(output, "\n", sep=""))
@@ -224,7 +225,7 @@ get_options = function(content){
   checkboxes = which(options$type == 'checkbox')
   options$defval[ checkboxes ] = check_map[ options$defval[ checkboxes ] ]
 
-  subset(options, type != 'hidden',  select=c(name, type, defval))
+  options[ options$type != 'hidden',  c('name', 'type', 'defval') ]
 }
 
 parse_attributes = function(x){

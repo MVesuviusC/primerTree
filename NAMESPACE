@@ -1,7 +1,3 @@
-S3method(as.DNAbin,primerTree)
-S3method(as.character,primerTree)
-S3method(content,primerTree)
-S3method(length,primerTree)
 S3method(print,primerTree)
 export(accession2gi)
 export(get_sequence)

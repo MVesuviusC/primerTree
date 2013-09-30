@@ -7,10 +7,10 @@
 #' @param start start base to retrieve, numbered beginning at 1.  If NULL the
 #'        beginning of the sequence.
 
-#' @param end end base to retrieve, numbered beginning at 1. if NULL the end of
+#' @param stop last base to retrieve, numbered beginning at 1. if NULL the end of
 #'        the sequence.
 #' @return an ape::DNAbin object.
-#' @seealso \code{\link{ape::DNAbin}}
+#' @seealso \code{\link{DNAbin}}
 #' @export get_sequence
 
 get_sequence = function(gi, start=NULL, stop=NULL){
@@ -41,6 +41,7 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 
 #' Retrieves fasta sequences from NCBI nucleotide database.
 #'
+#' @param gi the gi number of the sequence to retrieve
 #' @param start start bases to retrieve, numbered beginning at 1.  If NULL the
 #'        beginning of the sequence.
 
@@ -51,11 +52,11 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
 #'        provided by foreach
 #' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
-#' @return an ape::DNAbin object.
-#' @seealso \code{\link{ape::DNAbin}}
+#' @return an DNAbin object.
+#' @seealso \code{\link{DNAbin}}
 #' @export get_sequences
 
-get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, ..., .parallel=FALSE, .progress='none'){
+get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, .parallel=FALSE, .progress='none'){
   #expand arguments by recycling
   args = expand_arguments(gi=gi, start=start, stop=stop)
   #assign expanded arguments to actual arguments
@@ -82,7 +83,7 @@ expand_arguments <- function(...){
 #'
 #' @param dna fasta dna object the tree is to be constructed from
 #' @param ... furthur arguments to dist.dna
-#' @seealso \code{\link{ape::dist.dna}}, \code{\link{ape::nj}}
+#' @seealso \code{\link{dist.dna}}, \code{\link{nj}}
 #' @export tree_from_alignment
 tree_from_alignment = function(dna, ...){
   nj(dist(dna, ...))
@@ -96,6 +97,7 @@ tree_from_alignment = function(dna, ...){
 #' @param exec a character string with the name or path to the program
 #' @param quiet whether to supress output to stderr or stdout
 #' @param original.ordering use the original ordering of the sequences
+#' @param ... additional arguments passed to the command line clustalo
 clustalo = function (x, exec = 'clustalo', quiet = TRUE, original.ordering = TRUE, ...)
 {
     help_text = system(paste(exec, '--help'), intern=TRUE)

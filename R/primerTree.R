@@ -12,8 +12,18 @@
 #' @docType package
 NULL
 
+#' PrimerTree results for the mammalian 16S primers
+#' @name mammals_16S
+#' @docType data
+NULL
+
+#' PrimerTree results for the bryophyte trnL primers
+#' @name bryophytes_trnL
+#' @docType data
+NULL
+
 #' @S3method print primerTree
-print.primerTree = function(x){
+print.primerTree = function(x, ...){
   cat("Name: ", x$name, "\n",
       "  Arguments: ", paste(names(x$arguments), x$arguments, sep=":", collapse=' '), "\n")
   cat("\nHTTP Response\n")
@@ -24,51 +34,23 @@ print.primerTree = function(x){
       print(x$alignment)
   cat("\nPhylogenetic Tree\n")
       print(x$tree)
-      #"Response [", x$response[[1]]$url, "]\n",
-      #"  Status: ", x$response$status, "\n",
-      #lengths = vapply(x$sequence, FUN=length, FUN.VALUE=0)
-      #"Products: ", length(x$sequence), " sequences\n",
-      #"  min:", min(lengths), "\n",
-      #"  mean:", mean(lengths), "\n",
-      #"  max:", max(lengths), "\n",
-      #"Alignment: ", length(x$alignment), " ", nchar(x$alignment[[1]]), " bp sequences\n"
-      #)
-}
-#' @S3method as.DNAbin primerTree
-as.DNAbin.primerTree = function(x){
-  x$dna
-}
-#' @S3method as.character primerTree
-as.character.primerTree = function(x){
-  as.character(x$dna)
-}
-#' @S3method length primerTree
-length.primerTree = function(x){
-  length(x$dna)
-}
-#' @S3method content primerTree
-content.primerTree = function(x, ...){
-  content(x$response, ...)
 }
 #' plot function for a primerTree object, calls plot_tree_ranks
-#' @param primerTree object to plot
-#' @param type The type of tree to plot, default unrooted.
+#' @param x primerTree object to plot
 #' @param ranks The ranks to include, defaults to all common ranks, if NULL
-#' 'print all ranks.  If 'none' just print the layout.
-#' @param size The size of the colored points
-#' @param guide_size The size of the length guide.  If NULL auto detects a
-#'        reasonable size.
-#' @param legend_cutoff The number of different taxa names after which the
-#'        names are no longer printed.
+  #' print all ranks.  If 'none' just print the layout.
 #' @param ... additional arguments passed to plot_tree_ranks
 #' @method plot primerTree
 #' @export plot.primerTree
+#' @seealso \code{\link{plot_tree_ranks}}, \code{\link{plot_tree}}
 #' @examples
-#' plot with all common ranks
+#' #plot with all common ranks
 #' plot(mammals_16S)
-#' plot only the class
+#'
+#' #plot only the class
 #' plot(mammals_16S, 'class')
-#' plot the layout only
+#'
+#' #plot the layout only
 #' plot(mammals_16S, 'none')
 plot.primerTree = function(x, ranks=NULL, ...){
   if(is.null(ranks)){
@@ -92,14 +74,14 @@ plot.primerTree = function(x, ranks=NULL, ...){
 #' @param name name to give to the primer pair
 #' @param simplify use simple names for primer hit results or complex
 #' @param .progress name of the progress bar to use, see
-#' \code{\link{plyr::create_progress_bar}}
+#' \code{\link{create_progress_bar}}
 #' @param clustal_options a list of options to pass to clustal omega, run
 #'    \code{link{clustalo}} for a list of options
 #' @inheritParams primer_search
 #' @return A list with the following elements,
 #' \item{name name}{description name of the primer pair}
 #' \item{name BLAST_result}{description html blast results from Primer-BLAST as
-#'  'a \code{\link{httr::response}}} object.
+#'  'a \code{\link{response}}} object.
 #' \item{name taxonomy}{description taxonomy for the primer products from NCBI}
 #' \item{name sequence}{description sequence of the primer products}
 #' \item{name alignment}{description multiple alignment of the primer products}
