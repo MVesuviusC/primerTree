@@ -14,7 +14,7 @@
 #' @param ... additional arguments passed to Primer-Blast
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
 #'        provided by foreach
-#' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
+#' @param .progress name of the progress bar to use, see 'create_progress_bar'
 #' @return data.frame of primer hits
 #' @export primer_search
 primer_search = function(forward, reverse, num_aligns=500, num_permutations=25, ..., .parallel=FALSE, .progress='none'){

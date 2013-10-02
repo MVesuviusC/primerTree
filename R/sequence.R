@@ -9,7 +9,7 @@
 
 #' @param stop last base to retrieve, numbered beginning at 1. if NULL the end of
 #'        the sequence.
-#' @return an ape::DNAbin object.
+#' @return an DNAbin object.
 #' @seealso \code{\link{DNAbin}}
 #' @export get_sequence
 
@@ -33,7 +33,7 @@ get_sequence = function(gi, start=NULL, stop=NULL){
   content = content(response, as='raw')
 
   #from ape package read.FASTA
-  res <- .Call("rawStreamToDNAbin", content, PACKAGE = "ape")
+  res <- .Call("rawStreamToDNAbin", content)
   names(res) <- sub("^ +", "", names(res))
   class(res) <- "DNAbin"
   res
@@ -51,7 +51,7 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 #'        accession.
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
 #'        provided by foreach
-#' @param .progress name of the progress bar to use, see 'plyr::create_progress_bar'
+#' @param .progress name of the progress bar to use, see 'create_progress_bar'
 #' @return an DNAbin object.
 #' @seealso \code{\link{DNAbin}}
 #' @export get_sequences

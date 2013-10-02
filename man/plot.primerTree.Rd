@@ -19,6 +19,8 @@
   plot_tree_ranks
 }
 \examples{
+library(gridExtra)
+library(directlabels)
 #plot with all common ranks
 plot(mammals_16S)
 

@@ -14,7 +14,7 @@
   1. if NULL the end of the sequence.}
 }
 \value{
-  an ape::DNAbin object.
+  an DNAbin object.
 }
 \description{
   Retrieves a fasta sequence from NCBI nucleotide database.

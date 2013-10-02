@@ -21,7 +21,7 @@
   parallel backend provided by foreach}
 
   \item{.progress}{name of the progress bar to use, see
-  'plyr::create_progress_bar'}
+  'create_progress_bar'}
 }
 \value{
   an DNAbin object.

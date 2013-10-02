@@ -173,4 +173,3 @@ rm(scale_colour_discrete)
 plot(mammals_16S)
 plot(bryophytes_trnL)
 ```
-

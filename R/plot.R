@@ -2,15 +2,21 @@
 #Copyright (C) 2013 Jim Hester
 
 #' plots a tree along with a series of taxonomic ranks
-#' @param ranks The ranks to include, defaults to all common ranks, if null print all ranks.
+#' @param ranks The ranks to include, defaults to all common ranks, if null
+#' print all ranks.
 #' @inheritParams plot_tree
-#' @seealso \code{\link{plot_tree}} to plot only a single rank or the just the tree layout.
+#' @seealso \code{\link{plot_tree}} to plot only a single rank or the just the
+#' tree layout.
 #' @export plot_tree_ranks
 #' @examples
+#' library(gridExtra)
+#' library(directlabels)
 #' #plot all the common ranks
 #' plot_tree_ranks(mammals_16S$tree, mammals_16S$taxonomy)
 #' #plot specific ranks, with a larger dot size
-#' plot_tree_ranks(mammals_16S$tree, mammals_16S$taxonomy, ranks=c('kingdom', 'class', 'family'), size=3)
+#' plot_tree_ranks(mammals_16S$tree, mammals_16S$taxonomy,
+#'   ranks=c('kingdom', 'class', 'family'), size=3)
+
 plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
                       ranks=common_ranks,  size=2,
                                     guide_size=NULL, legend_cutoff=25, ...){
@@ -88,10 +94,12 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
   p + ggtitle(main)
 }
 
-#' layout a tree using ape, return an object to be plotted by \code{\link{plot_tree}}
+#' layout a tree using ape, return an object to be plotted by
+#' \code{\link{plot_tree}}
 #' @param tree The \code{\link{phylo}} tree to be plotted
 #' @param ... additional arguments to \code{\link{plot.phylo}}
-#' @return \item{name edge}{description list of x, y and xend, yend coordinates as well as ids for the edges}
+#' @return \item{name edge}{description list of x, y and xend, yend coordinates
+#' as well as ids for the edges}
 #' \item{name tips}{description list of x, y, label and id for the tips}
 #' \item{name nodes}{description list of x, y and id for the nodes}
 layout_tree_ape = function(tree, ...){
@@ -134,8 +142,4 @@ theme_noaxis = function(){
         axis.line=element_blank(), axis.text=element_blank(),
         axis.title=element_blank(), axis.ticks=element_blank(),
         plot.margin=unit(c(0, 0, -1, -1), 'lines'))
-}
-
-round_any = function(x, accuracy, f=round){
-  f(x/accuracy) * accuracy
 }

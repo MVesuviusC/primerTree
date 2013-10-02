@@ -87,7 +87,7 @@ parse_taxonomy_xml = function(xml){
   rbind.fill(xpathApply(xml, '//TaxaSet/Taxon', parse_taxon))
 }
 parse_taxon = function(taxon){
-  tax_id =xpathSApply(taxon, './TaxId', xmlValue)
+  tax_id = xpathSApply(taxon, './TaxId', xmlValue)
   ranks = xpathSApply(taxon, './/Rank', xmlValue)
   names = xpathSApply(taxon, './/ScientificName', xmlValue)
   names(names) = ranks

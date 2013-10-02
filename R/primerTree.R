@@ -10,6 +10,10 @@
 #' obtained using \code{\link{search_primer_pair}}
 #' @name primerTree
 #' @docType package
+#' @import ggplot2 grid XML ape httr plyr 
+#'   scales stringr foreach
+#' @importFrom lubridate %--% seconds now
+#' @useDynLib primerTree
 NULL
 
 #' PrimerTree results for the mammalian 16S primers
@@ -44,6 +48,8 @@ print.primerTree = function(x, ...){
 #' @export plot.primerTree
 #' @seealso \code{\link{plot_tree_ranks}}, \code{\link{plot_tree}}
 #' @examples
+#' library(gridExtra)
+#' library(directlabels)
 #' #plot with all common ranks
 #' plot(mammals_16S)
 #'

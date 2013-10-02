@@ -1,6 +1,6 @@
 # Documentation #
 [x] - figure out a good name.
-[ ] - document all exported functions with examples
+[x] - document all exported functions with examples
 [ ] - create vignette showing workflow by piece and automatic
 [x] - write wrapping function for entire workflow
 [x] - implement plot_rank function to plot a single rank by itself
@@ -10,7 +10,7 @@
 [x] - handle hits to the same gi at different locations, this will crash clustalw currently. # USE CLUSTALO
 [ ] - enumerate dropdown options
 [x] - very degenerate primers?
-[ ] - specify clustalo parameters, location
+[x] - specify clustalo parameters, location
 [x] - retry failed connections
 
 # Paper #

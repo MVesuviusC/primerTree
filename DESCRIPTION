@@ -4,15 +4,19 @@ Date: 2013-8-13
 Maintainer: Jim Hester <james.f.hester@gmail.com>
 Author: Jim Hester
 Title: PrimerTree
-Description: Query primers and graph their aligned products to
-    get a sense of sensitivity and specificity for environmental sampling.
+Description: Visually Assessing the Specificity and Informativeness of Primer
+    Pairs.
 Depends:
     R (>= 3.0.0),
+    directlabels,
+    gridExtra
+Imports:
+    ggplot2,
+    grid,
+    gridExtra,
     XML,
     ape,
     directlabels,
-    ggplot2,
-    gridExtra,
     httr,
     lubridate,
     plyr,
