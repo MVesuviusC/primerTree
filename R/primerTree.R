@@ -43,6 +43,7 @@ print.primerTree = function(x, ...){
 #' @param x primerTree object to plot
 #' @param ranks The ranks to include, defaults to all common ranks, if NULL
   #' print all ranks.  If 'none' just print the layout.
+#' @param main an optional title to display, if NULL displays the name as the title,
 #' @param ... additional arguments passed to plot_tree_ranks
 #' @method plot primerTree
 #' @export plot.primerTree
@@ -54,23 +55,27 @@ print.primerTree = function(x, ...){
 #' plot(mammals_16S)
 #'
 #' #plot only the class
-#' plot(mammals_16S, 'class')
+#' plot(mammals_17S, 'class')
 #'
 #' #plot the layout only
 #' plot(mammals_16S, 'none')
-plot.primerTree = function(x, ranks=NULL, ...){
+plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
   if(is.null(ranks)){
-    plot_tree_ranks(x$tree, x$taxonomy, x$name, ...)
+    if(is.null(main))
+      main = x$name
+    plot_tree_ranks(x$tree, x$taxonomy, ranks=ranks, main=main, ...)
   }
   else if(length(ranks) > 1){
-    plot_tree_ranks(x$tree, x$taxonomy, x$name, ranks=ranks, ...)
+    if(is.null(main))
+      main = x$name
+    plot_tree_ranks(x$tree, x$taxonomy, ranks=ranks, main=main, ...)
   }
   else {
     if(ranks == 'none') {
-      plot_tree(x$tree, ...)
+      plot_tree(x$tree, main=main, ...)
     }
     else{
-      plot_tree(x$tree, taxonomy=x$taxonomy, rank=ranks, ...)
+      plot_tree(x$tree, taxonomy=x$taxonomy, rank=ranks, main=main, ...)
     }
   }
 }
@@ -113,6 +118,9 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
   #a pointer, I could make it a reference class, but that seems to be overkill
   #as I am converting to a list at the end of the function anyway...
 
+  if(missing(forward) || missing(reverse))
+    BLAST_primer()
+    return()
 
   primer_search = new.env(parent=globalenv())
   #list all primers used to search
