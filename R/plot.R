@@ -98,10 +98,10 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
 #' \code{\link{plot_tree}}
 #' @param tree The \code{\link{phylo}} tree to be plotted
 #' @param ... additional arguments to \code{\link{plot.phylo}}
-#' @return \item{name edge}{description list of x, y and xend, yend coordinates
+#' @return \item{edge}{list of x, y and xend, yend coordinates
 #' as well as ids for the edges}
-#' \item{name tips}{description list of x, y, label and id for the tips}
-#' \item{name nodes}{description list of x, y and id for the nodes}
+#' \item{tips}{list of x, y, label and id for the tips}
+#' \item{nodes}{list of x, y and id for the nodes}
 layout_tree_ape = function(tree, ...){
   #hack to write no output
   cur_dev = dev.cur() #store previous dev

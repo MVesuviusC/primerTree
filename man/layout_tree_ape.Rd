@@ -12,11 +12,10 @@
   \code{\link{plot.phylo}}}
 }
 \value{
-  \item{name edge}{description list of x, y and xend, yend
-  coordinates as well as ids for the edges} \item{name
-  tips}{description list of x, y, label and id for the
-  tips} \item{name nodes}{description list of x, y and id
-  for the nodes}
+  \item{edge}{list of x, y and xend, yend coordinates as
+  well as ids for the edges} \item{tips}{list of x, y,
+  label and id for the tips} \item{nodes}{list of x, y and
+  id for the nodes}
 }
 \description{
   layout a tree using ape, return an object to be plotted

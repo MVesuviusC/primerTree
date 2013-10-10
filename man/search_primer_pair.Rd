@@ -41,16 +41,14 @@ a multiple alignment of the products}
   parallel backend provided by foreach}
 }
 \value{
-  A list with the following elements, \item{name
-  name}{description name of the primer pair} \item{name
-  BLAST_result}{description html blast results from
-  Primer-BLAST as 'a \code{\link{response}}} object.
-  \item{name taxonomy}{description taxonomy for the primer
-  products from NCBI} \item{name sequence}{description
-  sequence of the primer products} \item{name
-  alignment}{description multiple alignment of the primer
-  products} \item{name tree}{description phylogenetic tree
-  of the reconstructed from the 'multiple alignment}
+  A list with the following elements, \item{name}{name of
+  the primer pair} \item{BLAST_result}{html blast results
+  from Primer-BLAST as 'a \code{\link{response}}} object.
+  \item{taxonomy}{taxonomy for the primer products from
+  NCBI} \item{sequence}{sequence of the primer products}
+  \item{alignment}{multiple alignment of the primer
+  products} \item{tree}{phylogenetic tree of the
+  reconstructed from the 'multiple alignment}
 }
 \description{
   Automatic primer searching Search a given primer pair,
