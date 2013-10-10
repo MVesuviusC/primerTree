@@ -3,7 +3,7 @@ Version: 1.0.0
 Date: 2013-8-13
 Maintainer: Jim Hester <james.f.hester@gmail.com>
 Author: Jim Hester
-Title: PrimerTree
+Title: primerTree
 Description: Visually Assessing the Specificity and Informativeness of Primer
     Pairs.
 Depends:
@@ -13,10 +13,8 @@ Depends:
 Imports:
     ggplot2,
     grid,
-    gridExtra,
     XML,
     ape,
-    directlabels,
     httr,
     lubridate,
     plyr,

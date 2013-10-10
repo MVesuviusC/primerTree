@@ -10,7 +10,7 @@
 #' obtained using \code{\link{search_primer_pair}}
 #' @name primerTree
 #' @docType package
-#' @import ggplot2 grid XML ape httr plyr 
+#' @import ggplot2 grid XML ape httr plyr directlabels gridExtra
 #'   scales stringr foreach
 #' @importFrom lubridate %--% seconds now
 #' @useDynLib primerTree
@@ -85,13 +85,13 @@ plot.primerTree = function(x, ranks=NULL, ...){
 #'    \code{link{clustalo}} for a list of options
 #' @inheritParams primer_search
 #' @return A list with the following elements,
-#' \item{name name}{description name of the primer pair}
-#' \item{name BLAST_result}{description html blast results from Primer-BLAST as
+#' \item{name}{name of the primer pair}
+#' \item{BLAST_result}{html blast results from Primer-BLAST as
 #'  'a \code{\link{response}}} object.
-#' \item{name taxonomy}{description taxonomy for the primer products from NCBI}
-#' \item{name sequence}{description sequence of the primer products}
-#' \item{name alignment}{description multiple alignment of the primer products}
-#' \item{name tree}{description phylogenetic tree of the reconstructed from the
+#' \item{taxonomy}{taxonomy for the primer products from NCBI}
+#' \item{sequence}{sequence of the primer products}
+#' \item{alignment}{multiple alignment of the primer products}
+#' \item{tree}{phylogenetic tree of the reconstructed from the
 #' 'multiple alignment}
 #' @seealso \code{\link{primer_search}}, \code{\link{clustalo}}
 #' @export search_primer_pair
