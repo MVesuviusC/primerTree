@@ -42,8 +42,8 @@ print.primerTree = function(x, ...){
 #' plot function for a primerTree object, calls plot_tree_ranks
 #' @param x primerTree object to plot
 #' @param ranks The ranks to include, defaults to all common ranks, if NULL
-  #' print all ranks.  If 'none' just print the layout.
-#' @param main an optional title to display, if NULL displays the name as the title,
+#'   print all ranks.  If 'none' just print the layout.
+#' @param main an optional title to display, if NULL displays the name as the title
 #' @param ... additional arguments passed to plot_tree_ranks
 #' @method plot primerTree
 #' @export plot.primerTree
@@ -55,7 +55,7 @@ print.primerTree = function(x, ...){
 #' plot(mammals_16S)
 #'
 #' #plot only the class
-#' plot(mammals_17S, 'class')
+#' plot(mammals_16S, 'class')
 #'
 #' #plot the layout only
 #' plot(mammals_16S, 'none')
@@ -63,7 +63,7 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
   if(is.null(ranks)){
     if(is.null(main))
       main = x$name
-    plot_tree_ranks(x$tree, x$taxonomy, ranks=ranks, main=main, ...)
+    plot_tree_ranks(x$tree, x$taxonomy, main=main, ...)
   }
   else if(length(ranks) > 1){
     if(is.null(main))
@@ -190,4 +190,31 @@ seconds_elapsed_text = function(start_time){
 env2list = function(env){
   names = ls(env)
   mget(names, env)
+}
+#' identify the point closest to the mouse click
+#' only works on single ranks
+#' @param plot the plot to identify
+#' @param ... additional arguments passed to annotate
+#' @export identify.primerTree_plot
+identify.primerTree_plot = function(plot, ...) {
+  point = gglocator(plot$layers[[4]])
+  distances <- distance(point, plot$layers[[4]]$data[,c('x','y')])
+  closest <- which(distances == min(distances))[1]
+  point$label <- plot$layers[[4]]$data[closest,deparse(plot$layers[[4]]$mapping$colour)]
+  plot + annotate("text", label=point$label, x=point$x, y=point$y, ...)
+}
+gglocator = function(object) {
+  loc <-  as.numeric(grid.locator("npc"))
+
+  xrng <- with(object, range(data[,deparse(mapping$x)]))
+  yrng <- with(object, range(data[,deparse(mapping$y)]))
+
+  point <- data.frame(xrng[1] + loc[1]*diff(xrng), yrng[1] + loc[2]*diff(yrng))
+  names(point) <- with(object, c(deparse(mapping$x), deparse(mapping$y)))
+  point
+}
+
+#returns the distance from a point in point to the points in points
+distance <- function(point,points){
+  sqrt((point$x-points$x)^2 + (point$y-points$y)^2)
 }

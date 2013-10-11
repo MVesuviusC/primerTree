@@ -2,7 +2,8 @@
 \alias{plot.primerTree}
 \title{plot function for a primerTree object, calls plot_tree_ranks}
 \usage{
-  \method{plot}{primerTree} (x, ranks = NULL, ...)
+  \method{plot}{primerTree} (x, ranks = NULL, main = NULL,
+    ...)
 }
 \arguments{
   \item{x}{primerTree object to plot}
@@ -10,6 +11,9 @@
   \item{ranks}{The ranks to include, defaults to all common
   ranks, if NULL print all ranks.  If 'none' just print the
   layout.}
+
+  \item{main}{an optional title to display, if NULL
+  displays the name as the title}
 
   \item{...}{additional arguments passed to
   plot_tree_ranks}

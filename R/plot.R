@@ -91,7 +91,9 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
                     aes_string(x='x', y='y', color=rank, label=rank))
         }
   }
-  p + ggtitle(main)
+  p = p + ggtitle(main)
+  class(p) = c(class(p), 'primerTree_plot')
+  p
 }
 
 #' layout a tree using ape, return an object to be plotted by
