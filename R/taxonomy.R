@@ -42,7 +42,7 @@ gi2taxid = function(gi){
 parse_LinkSet = function(LinkSet){
   gid = xpathSApply(LinkSet, './/IdList/Id', xmlValue)
   taxid = xpathSApply(LinkSet, './/LinkSetDb/Link/Id', xmlValue)
-  if(length(taxid) == 0)
+  if(length(taxid) != 1)
     taxid = NA
   names(taxid) = gid
   taxid
