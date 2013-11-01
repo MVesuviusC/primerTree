@@ -43,7 +43,7 @@ parse_LinkSet = function(LinkSet){
   gid = xpathSApply(LinkSet, './/IdList/Id', xmlValue)
   taxid = xpathSApply(LinkSet, './/LinkSetDb/Link/Id', xmlValue)
   if(is.matrix(taxid)) {
-    taxid = as.character(taxid[1,1])
+    taxid <- as.character(taxid[1,1])
   }
   if(length(taxid) == 0)
     taxid = NA
