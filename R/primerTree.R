@@ -195,6 +195,7 @@ env2list = function(env){
 #' only works on single ranks
 #' @param plot the plot to identify
 #' @param ... additional arguments passed to annotate
+#' @method identify primerTree_plot
 #' @export identify.primerTree_plot
 identify.primerTree_plot = function(plot, ...) {
   point = gglocator(plot$layers[[4]])
