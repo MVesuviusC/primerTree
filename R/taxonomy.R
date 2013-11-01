@@ -10,7 +10,7 @@
 get_taxonomy = function(gis){
 
   gis = unique(as.character(gis))
-  taxids = gi2taxid(gis)
+  taxids = na.omit(gi2taxid(gis))
 
   taxonomy=fetch_taxonomy(unique(taxids))
   merge(
@@ -42,6 +42,7 @@ gi2taxid = function(gi){
 parse_LinkSet = function(LinkSet){
   gid = xpathSApply(LinkSet, './/IdList/Id', xmlValue)
   taxid = xpathSApply(LinkSet, './/LinkSetDb/Link/Id', xmlValue)
+  #  What kind of object is this supposed to return? I assume character? And how does 
   if(length(taxid) > 1)
     taxid = NA
   if(length(taxid) == 0)
