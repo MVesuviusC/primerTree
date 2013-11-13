@@ -118,9 +118,10 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
   #a pointer, I could make it a reference class, but that seems to be overkill
   #as I am converting to a list at the end of the function anyway...
 
-  if(missing(forward) || missing(reverse))
+  if(missing(forward) || missing(reverse)){
     BLAST_primer()
     return()
+  }
 
   primer_search = new.env(parent=globalenv())
   #list all primers used to search
