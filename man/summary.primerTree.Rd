@@ -1,0 +1,25 @@
+\name{summary.primerTree}
+\alias{summary.primerTree}
+\title{Summarize a primerTree result, printing quantiles of sequence length and
+pairwise differences.}
+\usage{
+\method{summary}{primerTree}(x, probs = c(0, 0.05, 0.5, 0.95, 1),
+  ranks = common_ranks)
+}
+\arguments{
+  \item{x}{the primerTree object to summarise}
+
+  \item{probs}{quantile probabilities to compute, defaults
+  to 0, 5, 50, 95, and 100 probabilities.}
+
+  \item{ranks}{ranks to show unique counts for, defaults to
+  the common ranks}
+}
+\value{
+  invisibly returns a list containing the printed results
+}
+\description{
+  Summarize a primerTree result, printing quantiles of
+  sequence length and pairwise differences.
+}
+

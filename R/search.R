@@ -16,7 +16,7 @@
 #'        provided by foreach
 #' @param .progress name of the progress bar to use, see 'create_progress_bar'
 #' @return data.frame of primer hits
-#' @export primer_search
+#' @export
 primer_search = function(forward, reverse, num_aligns=500, num_permutations=25, ..., .parallel=FALSE, .progress='none'){
   if(missing(forward) || missing(reverse))
     BLAST_primer()

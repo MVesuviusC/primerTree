@@ -3,7 +3,7 @@
 \title{layout a tree using ape, return an object to be plotted by
 \code{\link{plot_tree}}}
 \usage{
-  layout_tree_ape(tree, ...)
+layout_tree_ape(tree, ...)
 }
 \arguments{
   \item{tree}{The \code{\link{phylo}} tree to be plotted}

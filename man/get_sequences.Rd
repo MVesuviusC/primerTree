@@ -2,8 +2,8 @@
 \alias{get_sequences}
 \title{Retrieves fasta sequences from NCBI nucleotide database.}
 \usage{
-  get_sequences(gi, start = NULL, stop = NULL,
-    simplify = TRUE, .parallel = FALSE, .progress = "none")
+get_sequences(gi, start = NULL, stop = NULL, simplify = TRUE,
+  .parallel = FALSE, .progress = "none")
 }
 \arguments{
   \item{gi}{the gi number of the sequence to retrieve}

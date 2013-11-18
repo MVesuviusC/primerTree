@@ -2,7 +2,7 @@
 \alias{get_taxonomy}
 \title{Retrieve the taxonomy information from NCBI for a set of nucleotide gis.}
 \usage{
-  get_taxonomy(gis)
+get_taxonomy(gis)
 }
 \arguments{
   \item{gis}{a character vector of the gis to retrieve}

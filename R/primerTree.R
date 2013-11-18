@@ -26,7 +26,7 @@ NULL
 #' @docType data
 NULL
 
-#' @S3method print primerTree
+#' @export
 print.primerTree = function(x, ...){
   cat("Name: ", x$name, "\n",
       "  Arguments: ", paste(names(x$arguments), x$arguments, sep=":", collapse=' '), "\n")
@@ -45,8 +45,7 @@ print.primerTree = function(x, ...){
 #'   print all ranks.  If 'none' just print the layout.
 #' @param main an optional title to display, if NULL displays the name as the title
 #' @param ... additional arguments passed to plot_tree_ranks
-#' @method plot primerTree
-#' @export plot.primerTree
+#' @export
 #' @seealso \code{\link{plot_tree_ranks}}, \code{\link{plot_tree}}
 #' @examples
 #' library(gridExtra)
@@ -86,8 +85,10 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #' @param simplify use simple names for primer hit results or complex
 #' @param .progress name of the progress bar to use, see
 #' \code{\link{create_progress_bar}}
-#' @param clustal_options a list of options to pass to clustal omega, run
+#' @param clustal_options a list of options to pass to clustal omega, see
 #'    \code{link{clustalo}} for a list of options
+#' @param distance_options a list of options to pass to dist.dna, see
+#'    \code{link{dist.dna}} for a list of options
 #' @inheritParams primer_search
 #' @return A list with the following elements,
 #' \item{name}{name of the primer pair}
@@ -99,7 +100,7 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #' \item{tree}{phylogenetic tree of the reconstructed from the
 #' 'multiple alignment}
 #' @seealso \code{\link{primer_search}}, \code{\link{clustalo}}
-#' @export search_primer_pair
+#' @export
 #' @examples
 #' \dontrun{
 #' #simple search
@@ -111,8 +112,8 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #'  num_aligns=1000, total_primer_specificity_mismatch=3)
 #' }
 search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
-    num_permutations=25, simplify=TRUE, clustal_options=list(), ...,
-    .parallel=FALSE, .progress='none'){
+    num_permutations=25, simplify=TRUE, clustal_options=list(), distance_options=list(model='raw'),
+    ..., .parallel=FALSE, .progress='none'){
 
   #HACK, primerTree is an environment rather than a list so we can treat it as
   #a pointer, I could make it a reference class, but that seems to be overkill
@@ -172,6 +173,11 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
               ' length:', ncol(primer_search$alignment))
 
       start_time = now()
+      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment, distance_options)))
+      message('pairwise DNA distances calculated in ',
+              seconds_elapsed_text(start_time))
+
+      start_time = now()
       primer_search$tree = tree_from_alignment(primer_search$alignment)
       message('constructed neighbor joining tree in ', seconds_elapsed_text(start_time))
 
@@ -196,8 +202,7 @@ env2list = function(env){
 #' only works on single ranks
 #' @param plot the plot to identify
 #' @param ... additional arguments passed to annotate
-#' @method identify primerTree_plot
-#' @export identify.primerTree_plot
+#' @export
 identify.primerTree_plot = function(plot, ...) {
   point = gglocator(plot$layers[[4]])
   distances <- distance(point, plot$layers[[4]]$data[,c('x','y')])
@@ -220,3 +225,37 @@ gglocator = function(object) {
 distance <- function(point,points){
   sqrt((point$x-points$x)^2 + (point$y-points$y)^2)
 }
+
+#' Summarize a primerTree result, printing quantiles of sequence length and
+#' pairwise differences.
+
+#' @param x the primerTree object to summarise
+#' @param probs quantile probabilities to compute, defaults to 0, 5, 50, 95,
+#' and 100 probabilities.
+#' @param ranks ranks to show unique counts for, defaults to the common ranks
+#' @return invisibly returns a list containing the printed results
+#' @export
+summary.primerTree <- function(x, probs=c(0, .05, .5, .95, 1), ranks=common_ranks){
+  res = list()
+  res[['lengths']] = t(data.frame('Sequence lengths'=labeled_quantile(laply(x$sequence, length), sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
+  print(res[['lengths']])
+
+  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(x$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
+  cat('\n')
+  print(res[['distances']])
+
+  res[['ranks']] = laply(x$taxonomy[common_ranks], function(x) length(unique(x)))
+  cat('\n', 'Unique taxa out of ', length(x$sequence), ' sequences\n', sep='')
+  names(res[['ranks']]) = ranks
+  print(res[['ranks']])
+
+  invisible(res)
+}
+
+labeled_quantile = function(x, labels, ...){
+  res = quantile(x, ...)
+  names(res) = labels
+  res
+}
+
+

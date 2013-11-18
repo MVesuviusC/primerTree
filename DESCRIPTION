@@ -25,9 +25,3 @@ LazyData: true
 License: GPL-2
 VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
-Collate:
-    'plot.R'
-    'sequence.R'
-    'taxonomy.R'
-    'primerTree.R'
-    'search.R'

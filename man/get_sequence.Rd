@@ -2,7 +2,7 @@
 \alias{get_sequence}
 \title{Retrieves a fasta sequence from NCBI nucleotide database.}
 \usage{
-  get_sequence(gi, start = NULL, stop = NULL)
+get_sequence(gi, start = NULL, stop = NULL)
 }
 \arguments{
   \item{gi}{nucleotide gi to retrieve.}

@@ -4,10 +4,10 @@
 results, their product sequences, the taxonomic information for the sequences,
 a multiple alignment of the products}
 \usage{
-  search_primer_pair(forward, reverse, name = NULL,
-    num_aligns = 500, num_permutations = 25,
-    simplify = TRUE, clustal_options = list(), ...,
-    .parallel = FALSE, .progress = "none")
+search_primer_pair(forward, reverse, name = NULL, num_aligns = 500,
+  num_permutations = 25, simplify = TRUE, clustal_options = list(),
+  distance_options = list(model = "raw"), ..., .parallel = FALSE,
+  .progress = "none")
 }
 \arguments{
   \item{name}{name to give to the primer pair}
@@ -19,7 +19,11 @@ a multiple alignment of the products}
   \code{\link{create_progress_bar}}}
 
   \item{clustal_options}{a list of options to pass to
-  clustal omega, run \code{link{clustalo}} for a list of
+  clustal omega, see \code{link{clustalo}} for a list of
+  options}
+
+  \item{distance_options}{a list of options to pass to
+  dist.dna, see \code{link{dist.dna}} for a list of
   options}
 
   \item{forward}{forward primer to search by 5'-3' on plus

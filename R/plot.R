@@ -7,7 +7,7 @@
 #' @inheritParams plot_tree
 #' @seealso \code{\link{plot_tree}} to plot only a single rank or the just the
 #' tree layout.
-#' @export plot_tree_ranks
+#' @export
 #' @examples
 #' library(gridExtra)
 #' library(directlabels)
@@ -51,7 +51,7 @@ common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "spec
 #'        names are no longer printed.
 #' @param ... additional arguments passed to \code{\link{layout_tree_ape}}
 #' @return plot to be printed.
-#' @export plot_tree
+#' @export
 
 plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
                      rank=NULL, taxonomy=NULL,  size=2, legend_cutoff=25, ...){

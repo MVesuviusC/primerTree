@@ -11,7 +11,7 @@
 #'        the sequence.
 #' @return an DNAbin object.
 #' @seealso \code{\link{DNAbin}}
-#' @export get_sequence
+#' @export
 
 get_sequence = function(gi, start=NULL, stop=NULL){
 
@@ -54,7 +54,7 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 #' @param .progress name of the progress bar to use, see 'create_progress_bar'
 #' @return an DNAbin object.
 #' @seealso \code{\link{DNAbin}}
-#' @export get_sequences
+#' @export
 
 get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, .parallel=FALSE, .progress='none'){
   #expand arguments by recycling
@@ -84,7 +84,7 @@ expand_arguments <- function(...){
 #' @param dna fasta dna object the tree is to be constructed from
 #' @param ... furthur arguments to dist.dna
 #' @seealso \code{\link{dist.dna}}, \code{\link{nj}}
-#' @export tree_from_alignment
+#' @export
 tree_from_alignment = function(dna, ...){
   nj(dist(dna, ...))
 }
@@ -98,6 +98,7 @@ tree_from_alignment = function(dna, ...){
 #' @param quiet whether to supress output to stderr or stdout
 #' @param original.ordering use the original ordering of the sequences
 #' @param ... additional arguments passed to the command line clustalo
+#' @export
 clustalo = function (x, exec = 'clustalo', quiet = TRUE, original.ordering = TRUE, ...)
 {
     help_text = system(paste(exec, '--help'), intern=TRUE)

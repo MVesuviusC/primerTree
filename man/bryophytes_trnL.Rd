@@ -5,5 +5,4 @@
 \description{
   PrimerTree results for the bryophyte trnL primers
 }
-\keyword{datasets}
 

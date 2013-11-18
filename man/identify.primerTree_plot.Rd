@@ -3,7 +3,7 @@
 \title{identify the point closest to the mouse click
 only works on single ranks}
 \usage{
-  \method{identify}{primerTree_plot} (plot, ...)
+\method{identify}{primerTree_plot}(plot, ...)
 }
 \arguments{
   \item{plot}{the plot to identify}

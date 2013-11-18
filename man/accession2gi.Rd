@@ -2,7 +2,7 @@
 \alias{accession2gi}
 \title{Maps a genbank accession to a nuclotide database gi.}
 \usage{
-  accession2gi(accession)
+accession2gi(accession)
 }
 \arguments{
   \item{accession}{accession character vector to lookup.}
