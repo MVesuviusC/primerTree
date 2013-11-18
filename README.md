@@ -14,18 +14,18 @@ PrimerTree: Visually Assessing the Specificity and Informativeness of Primer Pai
 ## Installation ##
 ### R installation ###
 #### CRAN ####
-```r
+```s
 install.packages('primerTree')
 ```
 #### Github ####
-```r
+```s
 library(devtools)
 install_github(user='jimhester', repo='primerTree')
 ```
 ### [Clustal Omega](http://www.clustal.org/omega/#Download) Installation ###
 #### Windows ####
 Use the precompiled windows binary.  Either put the installed clustalo.exe in your path, or pass the path to the executable in the clustal_options option
-```r
+```s
 library(primerTree)
 mammals_16S = search_primer_pair(name='Mammals 16S',
   'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT', clustal_options=c(exec='C:\Program Files\Clustal Omega\clustalo.exe'))
@@ -41,14 +41,14 @@ executable.
 
 ## Usage ##
 Simple search for a Mammal 16S primer
-```r
+```s
 library(primerTree)
 mammals_16S = search_primer_pair(name='Mammals 16S', 'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT')
 plot(mammals_16S)
 ```
 
 Using the parallel features with the multicore package using the doMC backend, with 8 threads.
-```r
+```s
 library(doMC)
 registerDoMC(8)
 library(primerTree)
