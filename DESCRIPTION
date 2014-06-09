@@ -1,5 +1,5 @@
 Package: primerTree
-Version: 1.0.0
+Version: 1.0.1
 Date: 2013-8-13
 Maintainer: Jim Hester <james.f.hester@gmail.com>
 Author: Jim Hester
@@ -23,5 +23,4 @@ Imports:
     foreach
 LazyData: true
 License: GPL-2
-VignetteBuilder: knitr
 Packaged: 2013-06-03 13:51:16 UTC; hesterj

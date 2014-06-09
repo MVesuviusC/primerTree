@@ -200,10 +200,10 @@ env2list = function(env){
 }
 #' identify the point closest to the mouse click
 #' only works on single ranks
-#' @param plot the plot to identify
+#' @param x the plot to identify
 #' @param ... additional arguments passed to annotate
 #' @export
-identify.primerTree_plot = function(plot, ...) {
+identify.primerTree_plot = function(x, ...) {
   point = gglocator(plot$layers[[4]])
   distances <- distance(point, plot$layers[[4]]$data[,c('x','y')])
   closest <- which(distances == min(distances))[1]
@@ -229,23 +229,25 @@ distance <- function(point,points){
 #' Summarize a primerTree result, printing quantiles of sequence length and
 #' pairwise differences.
 
-#' @param x the primerTree object to summarise
+#' @param object the primerTree object to summarise
+#' @param ... Ignored options
 #' @param probs quantile probabilities to compute, defaults to 0, 5, 50, 95,
 #' and 100 probabilities.
 #' @param ranks ranks to show unique counts for, defaults to the common ranks
 #' @return invisibly returns a list containing the printed results
 #' @export
-summary.primerTree <- function(x, probs=c(0, .05, .5, .95, 1), ranks=common_ranks){
+summary.primerTree <- function(object, ..., probs=c(0, .05, .5, .95, 1), ranks = common_ranks) {
+
   res = list()
-  res[['lengths']] = t(data.frame('Sequence lengths'=labeled_quantile(laply(x$sequence, length), sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
+  res[['lengths']] = t(data.frame('Sequence lengths'=labeled_quantile(laply(object$sequence, length), sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   print(res[['lengths']])
 
-  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(x$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
+  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   cat('\n')
   print(res[['distances']])
 
-  res[['ranks']] = laply(x$taxonomy[common_ranks], function(x) length(unique(x)))
-  cat('\n', 'Unique taxa out of ', length(x$sequence), ' sequences\n', sep='')
+  res[['ranks']] = laply(object$taxonomy[common_ranks], function(x) length(unique(x)))
+  cat('\n', 'Unique taxa out of ', length(object$sequence), ' sequences\n', sep='')
   names(res[['ranks']]) = ranks
   print(res[['ranks']])
 
@@ -257,5 +259,3 @@ labeled_quantile = function(x, labels, ...){
   names(res) = labels
   res
 }
-
-
