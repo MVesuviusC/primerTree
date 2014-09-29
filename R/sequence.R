@@ -86,7 +86,7 @@ expand_arguments <- function(...){
 #' @seealso \code{\link{dist.dna}}, \code{\link{nj}}
 #' @export
 tree_from_alignment = function(dna, ...){
-  nj(dist(dna, model="N", ...))
+  nj(dist.dna(dna, model="N", ...))
 }
 #' Multiple sequence alignment with clustal omega
 #'
