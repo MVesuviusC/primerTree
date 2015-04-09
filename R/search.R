@@ -235,7 +235,7 @@ parsable_html = function(response){
   #this gsub regex is to remove the definition lines, some of which have
   #  bracketed <junk> in them, which messes up the parsing
 
-  content = htmlParse(gsub('(viewer.fcgi.*?</a>).*?<pre>\n\n', '\\1\n<pre>', content(response, as='text')))
+  htmlParse(gsub('("new_entrez".*?</a>).*?<pre>\n\n', '\\1\n<pre>', content(response, as='text')))
 }
 filter_duplicates = function(hits){
   location_columns = c('accession', 'forward_start', 'forward_stop', 'reverse_start', 'reverse_stop')
