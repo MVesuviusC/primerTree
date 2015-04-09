@@ -85,8 +85,8 @@ expand_arguments <- function(...){
 #' @param ... furthur arguments to dist.dna
 #' @seealso \code{\link{dist.dna}}, \code{\link{nj}}
 #' @export
-tree_from_alignment = function(dna, ...){
-  nj(dist.dna(dna, model="N", pairwise.deletion=TRUE, ...))
+tree_from_alignment = function(dna, pairwise.deletion=TRUE, ...){
+  nj(dist.dna(dna, model="N", pairwise.deletion=pairwise.deletion, ...))
 }
 #' Multiple sequence alignment with clustal omega
 #'
