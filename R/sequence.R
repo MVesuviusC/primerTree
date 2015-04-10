@@ -82,7 +82,8 @@ expand_arguments <- function(...){
 #' Construct a neighbor joining tree from a dna alignment
 #'
 #' @param dna fasta dna object the tree is to be constructed from
-#' @param pairwise.deletion a logical indicating if the distance matrix should be constructed using pairwise deletion
+#' @param pairwise.deletion a logical indicating if the distance matrix should 
+#' be constructed using pairwise deletion
 #' @param ... furthur arguments to dist.dna
 #' @seealso \code{\link{dist.dna}}, \code{\link{nj}}
 #' @export
