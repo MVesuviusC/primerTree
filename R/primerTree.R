@@ -200,10 +200,10 @@ env2list = function(env){
 }
 #' identify the point closest to the mouse click
 #' only works on single ranks
-#' @param x the plot to identify
+#' @param plot the plot to identify
 #' @param ... additional arguments passed to annotate
 #' @export
-identify.primerTree_plot = function(x, ...) {
+identify.primerTree_plot = function(plot, ...) {
   point = gglocator(plot$layers[[4]])
   distances <- distance(point, plot$layers[[4]]$data[,c('x','y')])
   closest <- which(distances == min(distances))[1]
