@@ -2,26 +2,17 @@
 % Please edit documentation in R/filterResults.R
 \name{filter_seqs.primerTree}
 \alias{filter_seqs.primerTree}
-\title{Filter out sequences retrieved by search_primer_pair() that are either too
-short or too long. The alignment and tree will be recalculated after removing
-unwanted reads.}
+\title{Method for primerTree objects}
 \usage{
 \method{filter_seqs}{primerTree}(primertree_obj, min_length = 0,
   max_length = Inf)
 }
 \arguments{
-\item{primertree_obj}{a primerTree object}
-
 \item{min_length}{the minimum sequence length to keep}
 
 \item{max_length}{the maximum sequence length to keep}
 }
-\value{
-a primerTree object
-}
 \description{
-Filter out sequences retrieved by search_primer_pair() that are either too
-short or too long. The alignment and tree will be recalculated after removing
-unwanted reads.
+Method for primerTree objects
 }
 

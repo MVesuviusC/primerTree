@@ -8,6 +8,16 @@ unwanted reads.}
 \usage{
 filter_seqs(x, ...)
 }
+\arguments{
+\item{x}{a primerTree object}
+
+\item{min_length}{the minimum sequence length to keep}
+
+\item{max_length}{the maximum sequence length to keep}
+}
+\value{
+a primerTree object
+}
 \description{
 Filter out sequences retrieved by search_primer_pair() that are either too
 short or too long. The alignment and tree will be recalculated after removing
