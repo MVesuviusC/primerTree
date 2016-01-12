@@ -1,2 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^Makefile$
+^.*docx$
+^.*.md$
+^figure$
+^citations$
+^.*\.bib$
+^test\.fa$
+^.*\.html$

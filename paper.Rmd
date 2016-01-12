@@ -26,7 +26,7 @@ sequences in a database. However, there are no tools to systematically analyze
 and visualize the specificity of PCR primers and the informativeness of the
 amplified sequence. PrimerTree is an R package that enables identifying
 potential target sequences for a set of primers and generates
-taxonomicallyannotated phylogenetic trees with the predicted amplification
+taxonomically annotated phylogenetic trees with the predicted amplification
 products.
 
 ## Availability ##

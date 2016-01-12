@@ -10,9 +10,14 @@
 #' obtained using \code{\link{search_primer_pair}}
 #' @name primerTree
 #' @docType package
-#' @import ggplot2 grid XML ape httr plyr directlabels gridExtra
-#'   scales stringr foreach
+#' @import ggplot2 XML ape httr plyr directlabels gridExtra
+#'   stringr foreach
 #' @importFrom lubridate %--% seconds now
+#' @importFrom grid grid.locator
+#' @importFrom scales expand_range
+#' @importFrom grDevices dev.cur dev.off dev.set pdf
+#' @importFrom stats na.omit quantile
+#' @importFrom utils capture.output
 #' @useDynLib primerTree
 NULL
 

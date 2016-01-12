@@ -1,11 +1,12 @@
 Package: primerTree
-Version: 1.0.1
-Date: 2013-8-13
+Version: 1.0.3
 Maintainer: Jim Hester <james.f.hester@gmail.com>
 Author: Jim Hester
-Title: primerTree
-Description: Visually Assessing the Specificity and Informativeness of Primer
-    Pairs.
+Title: Visually Assessing the Specificity and Informativeness of Primer
+    Pairs
+Description: Identifies potential target sequences for a given set of primers
+  and generates taxonomically annotated phylogenetic trees with the predicted
+  amplification products.
 Depends:
     R (>= 3.0.0),
     directlabels,
@@ -24,3 +25,4 @@ Imports:
 LazyData: true
 License: GPL-2
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
+RoxygenNote: 5.0.1

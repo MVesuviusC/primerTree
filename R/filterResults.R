@@ -8,18 +8,19 @@
 #' @param x a primerTree object
 #' @param min_length the minimum sequence length to keep
 #' @param max_length the maximum sequence length to keep
+#' @param ... additional arguments passed to methods.
 #' @return a primerTree object
 #' @examples
-#' 
+#' \dontrun{
 #' # filter out sequences longer or shorter than desired:
 #' mammals_16S_filtered <- filter_seqs(mammals_16S, min_length=131, max_length=156)
+#' }
 #' @export
 filter_seqs = function(x, ...) UseMethod("filter_seqs")
 
-#' Method for primerTree objects
-#' @inheritParams filter_seqs
+#' @describeIn filter_seqs Method for primerTree objects
 #' @export
-filter_seqs.primerTree = function(primertree_obj, min_length = 0, max_length = Inf ) {
+filter_seqs.primerTree = function(x, min_length = 0, max_length = Inf, ...) {
   #if(is.null(primerTreeObj$sequence)) {
   #  print "No sequences in primerTree object"
   #}
