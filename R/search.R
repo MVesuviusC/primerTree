@@ -232,10 +232,16 @@ parse_attributes = function(x){
   as.data.frame(t(xmlAttrs(x)))
 }
 parsable_html = function(response){
+  txt <- content(response, as='text')
+
+  # remove any unicode characters
+  Encoding(txt) <- "UTF-8"
+  txt <- iconv(txt, "UTF-8", "ASCII", sub = "")
+
   #this gsub regex is to remove the definition lines, some of which have
   #  bracketed <junk> in them, which messes up the parsing
-
-  htmlParse(gsub('("new_entrez".*?</a>).*?<pre>\n\n', '\\1\n<pre>', content(response, as='text')))
+  txt <- gsub('("new_entrez".*?</a>).*?<pre>\n\n', '\\1\n<pre>', txt)
+  htmlParse(txt)
 }
 filter_duplicates = function(hits){
   location_columns = c('accession', 'forward_start', 'forward_stop', 'reverse_start', 'reverse_stop')
