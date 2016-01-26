@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get a summary of sequence lengths from a primerTree object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for seq_lengths {primerTree}"><tr><td>seq_lengths {primerTree}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get a summary of sequence lengths from a primerTree object</h2>
+
+<h3>Description</h3>
+
+<p>Get a summary of sequence lengths from a primerTree object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+seq_lengths(x, summarize = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a primerTree object.</p>
+</td></tr>
+<tr valign="top"><td><code>summarize</code></td>
+<td>
+<p>a logical indicating if a summary should be displayed</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a table of sequence length frequencies
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Show the counts for each length
+seq_lengths(mammals_16S)
+
+# Plot the distribution of lengths
+seqLengths &lt;- seq_lengths(mammals_16S)
+barplot(seqLengths,
+ main = "Frequency of sequence lengths for 16S mammal primers",
+ xlab="Amplicon length (in bp)",
+ ylab=("Frequency"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>primerTree</em> version 1.0.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Filter out sequences retrieved by search_primer_pair() that...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for filter_seqs {primerTree}"><tr><td>filter_seqs {primerTree}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Filter out sequences retrieved by search_primer_pair() that are either too
+short or too long. The alignment and tree will be recalculated after removing
+unwanted reads.</h2>
+
+<h3>Description</h3>
+
+<p>Filter out sequences retrieved by search_primer_pair() that are either too
+short or too long. The alignment and tree will be recalculated after removing
+unwanted reads.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+filter_seqs(x, ...)
+
+## S3 method for class 'primerTree'
+filter_seqs(x, min_length = 0, max_length = Inf, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a primerTree object</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments passed to methods.</p>
+</td></tr>
+<tr valign="top"><td><code>min_length</code></td>
+<td>
+<p>the minimum sequence length to keep</p>
+</td></tr>
+<tr valign="top"><td><code>max_length</code></td>
+<td>
+<p>the maximum sequence length to keep</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a primerTree object
+</p>
+
+
+<h3>Methods (by class)</h3>
+
+
+<ul>
+<li> <p><code>primerTree</code>: Method for primerTree objects
+</p>
+</li></ul>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# filter out sequences longer or shorter than desired:
+mammals_16S_filtered &lt;- filter_seqs(mammals_16S, min_length=131, max_length=156)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>primerTree</em> version 1.0.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

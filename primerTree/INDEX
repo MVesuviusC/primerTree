@@ -1,0 +1,50 @@
+accession2gi            Maps a genbank accession to a nuclotide
+                        database gi.
+bryophytes_trnL         PrimerTree results for the bryophyte trnL
+                        primers
+calc_rank_dist_ave      calc_rank_dist_ave Summarize pairwise
+                        differences.
+clustalo                Multiple sequence alignment with clustal omega
+filter_seqs             Filter out sequences retrieved by
+                        search_primer_pair() that are either too short
+                        or too long. The alignment and tree will be
+                        recalculated after removing unwanted reads.
+get_sequence            Retrieves a fasta sequence from NCBI nucleotide
+                        database.
+get_sequences           Retrieves fasta sequences from NCBI nucleotide
+                        database.
+get_taxonomy            Retrieve the taxonomy information from NCBI for
+                        a set of nucleotide gis.
+gi2taxid                Maps a nucleotide database gi to a taxonomy
+                        database taxId
+identify.primerTree_plot
+                        identify the point closest to the mouse click
+                        only works on single ranks
+layout_tree_ape         layout a tree using ape, return an object to be
+                        plotted by 'plot_tree'
+mammals_16S             PrimerTree results for the mammalian 16S
+                        primers
+plot.primerTree         plot function for a primerTree object, calls
+                        plot_tree_ranks
+plot_tree               plots a tree, optionally with colored and
+                        labeled points by taxonomic rank
+plot_tree_ranks         plots a tree along with a series of taxonomic
+                        ranks
+primerTree              'primerTree' Visually Assessing the Specificity
+                        and Informativeness of Primer Pairs
+primer_search           Query a pair of primers using ncbi's
+                        Primer-BLAST, if primers contain iupac
+search_primer_pair      Automatic primer searching Search a given
+                        primer pair, retrieving the alignment results,
+                        their product sequences, the taxonomic
+                        information for the sequences, a multiple
+                        alignment of the products
+seq_lengths             Get a summary of sequence lengths from a
+                        primerTree object
+seq_lengths.primerTree
+                        Method for primerTree objects
+summary.primerTree      Summarize a primerTree result, printing
+                        quantiles of sequence length and pairwise
+                        differences.
+tree_from_alignment     Construct a neighbor joining tree from a dna
+                        alignment

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: plot function for a primerTree object, calls plot_tree_ranks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for plot.primerTree {primerTree}"><tr><td>plot.primerTree {primerTree}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>plot function for a primerTree object, calls plot_tree_ranks</h2>
+
+<h3>Description</h3>
+
+<p>plot function for a primerTree object, calls plot_tree_ranks
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'primerTree'
+plot(x, ranks = NULL, main = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>primerTree object to plot</p>
+</td></tr>
+<tr valign="top"><td><code>ranks</code></td>
+<td>
+<p>The ranks to include, defaults to all common ranks, if NULL
+print all ranks.  If 'none' just print the layout.</p>
+</td></tr>
+<tr valign="top"><td><code>main</code></td>
+<td>
+<p>an optional title to display, if NULL displays the name as the title</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments passed to plot_tree_ranks</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="plot_tree_ranks.html">plot_tree_ranks</a></code>, <code><a href="plot_tree.html">plot_tree</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(gridExtra)
+library(directlabels)
+#plot with all common ranks
+plot(mammals_16S)
+
+#plot only the class
+plot(mammals_16S, 'class')
+
+#plot the layout only
+plot(mammals_16S, 'none')
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>primerTree</em> version 1.0.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

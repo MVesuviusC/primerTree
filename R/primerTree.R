@@ -117,7 +117,7 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #'  num_aligns=1000, total_primer_specificity_mismatch=3)
 #' }
 search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
-    num_permutations=25, simplify=TRUE, clustal_options=list(), distance_options=list(model='raw'),
+    num_permutations=25, simplify=TRUE, clustal_options=list(), distance_options=list(model="N", pairwise.deletion=T),
     ..., .parallel=FALSE, .progress='none'){
 
   #HACK, primerTree is an environment rather than a list so we can treat it as
@@ -250,6 +250,10 @@ summary.primerTree <- function(object, ..., probs=c(0, .05, .5, .95, 1), ranks =
   res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   cat('\n')
   print(res[['distances']])
+  
+  res[['rankDistances']] = calc_rank_dist_ave(object, common_ranks)
+  #cat('\n', 'Median pairwise differences for taxonomic levels')
+  print(res[['rankDistances']])
 
   res[['ranks']] = laply(object$taxonomy[common_ranks], function(x) length(unique(x)))
   cat('\n', 'Unique taxa out of ', length(object$sequence), ' sequences\n', sep='')
@@ -264,3 +268,118 @@ labeled_quantile = function(x, labels, ...){
   names(res) = labels
   res
 }
+
+#' @title calc_rank_dist_ave
+#' Summarize 
+#' pairwise differences.
+
+#' @param x a primerTree object 
+#' @param ... Ignored options
+#' @param ranks ranks to show unique counts for, defaults to the common ranks
+#' @return returns a data frame of results
+#' @details 
+#' The purpose of this function is to calculate the average number
+#' of nucleotide differences between species within a given taxonomic 
+#' level. 
+#' 
+#' There are several key assumptions and calculations made in this 
+#' function.
+#' 
+#' First, the function randomly selects one sequence from each species
+#' in the primerTree results. This is to keep any one species (e.g.
+#' human, cow, etc.) with many hits from skewing the results.
+#' 
+#' Second, for each taxonomic level tested, the function divides the
+#' sequences by each taxon at that level and calculates the mean 
+#' number of nucleotide differences within that taxa, then returns the
+#' mean of those values. 
+#' 
+#' Third, when calculating the average distance, any taxa for which 
+#' there is only one species is omitted, as the number of nucleotide
+#' differences will always be 0.
+#' 
+#' @examples
+#' \dontrun{
+#' calc_rank_dist_ave(mammals_16S)
+#' 
+#' calc_rank_dist_ave(bryophytes_trnL)
+#' 
+#' # Note that the differences between the results from these two primers
+#' # the mean nucleotide differences is much higher for the mammal primers
+#' # than the byrophyte primers. This suggests that the mammal primers have
+#' # better resolution to distinguish individual species.
+#' }
+#' @export
+
+# using tree data format info from http://www.phytools.org/eqg/Exercise_3.2/ 
+calc_rank_dist_ave <- function(x, ranks = common_ranks, ...) {
+  usedRanks <- grep("species", ranks, invert = T, value = T)
+  rankDistMean <- data.frame(matrix(nrow=1,ncol=0))
+  for(rank in usedRanks) {
+    
+    # Raw taxonomy data
+    taxa <- as.data.frame(x$taxonomy)
+    
+    # Randomize the order of the taxa data frame for the next step
+    taxa <- taxa[ sample(1:nrow(taxa), size = nrow(taxa), replace = F) ,]
+    rownames(taxa) <- taxa$gi
+    
+    # Pick random example per species and add back in the taxa info
+    uniqueFactors <- as.data.frame(unique( taxa$species ))
+    colnames(uniqueFactors) <- "species"
+    uniqueFactors <- join(uniqueFactors, taxa, type = "left",match="first", by = "species")
+    uniqueFactors <- uniqueFactors[, colnames(uniqueFactors) %in% c("gi","species",rank)]
+    
+    # Drop any row in (rank) where there is only one species represented
+    # Any instance of this leads to a distance within that rank of 0, skewing the results downward
+    counts <- as.data.frame(table(uniqueFactors[[rank]]))
+    colnames(counts) <- c(rank,"count")
+    uniqueFactors <- join(uniqueFactors, counts, by = rank)
+    uniqueFactors <- subset(uniqueFactors, count > 1)
+    
+    # Get sequences for randomly selected species
+    seqs <- x$sequence
+    seqs <- seqs[names(seqs) %in% uniqueFactors$gi ]
+    
+    # Align and calculate pairwise distances and convert dists to dataframe
+    align <- clustalo(seqs)
+    dists <- as.data.frame(as.matrix(dist.dna(align, model="N", pairwise.deletion=T)))
+    dists$gi <- row.names(dists)
+    
+    # Melt the dists dataframe so I can drop any distance that isn't within the (rank)
+    melted <- melt(dists,id="gi",variable.name = "gi2", value.name = "dist")
+    
+    # Replace the rank1 gi with the rank1 taxa
+    #melted2 <- join(melted, uniqueFactors[,colnames(uniqueFactors) %in% c("gi", rank)],by = "gi")
+    melted <- join(melted, uniqueFactors,by = "gi")
+    melted$rank1 <- melted[[rank]]
+    
+    # Drop all columns except the three needed so the next join doesn't get messed up
+    melted <- melted[,colnames(melted) %in% c("gi2", "dist", "rank1", "species")]
+    colnames(melted)[1] <- "gi"
+    
+    # Replace the rank2 gi with the rank2 taxa
+    melted <- join(melted, uniqueFactors, by = "gi")
+    melted$rank2 <- melted[[rank]]
+    
+    # Drop all columns except the three needed
+    melted <- melted[,colnames(melted) %in% c("rank2", "dist", "rank1","species")]
+    
+    # We only want distances within a taxa, so drop all comparisons between taxa 
+    # We also want to drop any comparisons of a species to itself, which will have dist == 0
+    melted <- subset(melted, rank1 == rank2 & species != species.1)
+    
+    # Calculate the median distance for each taxa compared
+    #   We calculate each separately to avoid any one taxa with lots of hits (like human seqs) 
+    #   from skewing the median
+    melted$group <- paste(melted$rank1,melted$rank2)
+    perGroup <- ddply(melted,.(group), summarize, median = median(dist))
+    
+    # Plug the medians into the storage dataframe
+    rankDistMean[[rank]] <- mean(melted$dist)
+  }
+  message("\nAverage number of nucleotide differences between sequences within a given taxonomic group")
+  message("See function description for further details")
+  return(rankDistMean)
+}
+
