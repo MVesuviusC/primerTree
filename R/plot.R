@@ -32,6 +32,8 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
     }
   }
   p = do.call(arrangeGrob, plots)
+  class(p) <- c("primerTree_plot_multi", class(p))
+
   p
 }
 common_ranks = c("kingdom", "phylum", "class", "order", "family", "genus", "species")
@@ -144,4 +146,9 @@ theme_noaxis = function(){
         axis.line=element_blank(), axis.text=element_blank(),
         axis.title=element_blank(), axis.ticks=element_blank(),
         plot.margin=unit(c(0, 0, -1, -1), 'lines'))
+}
+
+#' @export
+print.primerTree_plot_multi <- function(x, ...) {
+   grid.arrange(x, ...)
 }
