@@ -252,7 +252,6 @@ summary.primerTree <- function(object, ..., probs=c(0, .05, .5, .95, 1), ranks =
   print(res[['distances']])
   
   res[['rankDistances']] = calc_rank_dist_ave(object, common_ranks)
-  #cat('\n', 'Median pairwise differences for taxonomic levels')
   print(res[['rankDistances']])
 
   res[['ranks']] = laply(object$taxonomy[common_ranks], function(x) length(unique(x)))
