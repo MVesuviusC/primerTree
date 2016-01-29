@@ -14,4 +14,4 @@ LazyData: true
 License: GPL-2
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
 RoxygenNote: 5.0.1
-Built: R 3.2.1; x86_64-redhat-linux-gnu; 2016-01-29 18:19:23 UTC; unix
+Built: R 3.2.1; x86_64-redhat-linux-gnu; 2016-01-29 19:28:07 UTC; unix
