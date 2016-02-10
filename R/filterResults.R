@@ -26,14 +26,14 @@ filter_seqs.primerTree = function(x, min_length = 0, max_length = Inf, ...) {
   #}
   
   # calculate how many removed and print out to screen
-  lengths <- unlist(lapply(x$sequence, length))
+  lengths <- vapply(x$sequence, length, integer(1))
   above_max <- lengths >= max_length
   below_min <- lengths <= min_length
   message(sum(below_min), " sequences below ", min_length) # same for min
   message(sum(above_max), " sequences above ", max_length) # same for min
   
   #filter the sequences
-  x$sequence <- x$sequence[lengths > min_length & lengths < max_length]
+  x$sequence <- x$sequence[lengths >= min_length & lengths <= max_length]
       
   # realign filtered sequences
   x$alignment <- clustalo(x$sequence)
@@ -65,7 +65,7 @@ seq_lengths <- function(x,summarize = TRUE) UseMethod("seq_lengths")
 #' @inheritParams seq_lengths
 #' @export
 seq_lengths.primerTree <- function(x, summarize = TRUE) {
-  lengths <- unlist(lapply(x$sequence, length))
+  lengths <- vapply(x$sequence, length, integer(1))
   message("sequence length distribution: ")
   table(as.factor(lengths))
 }
