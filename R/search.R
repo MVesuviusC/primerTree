@@ -15,7 +15,7 @@
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
 #'        provided by foreach
 #' @param .progress name of the progress bar to use, see 'create_progress_bar'
-#' @return data.frame of primer hits
+#' @return httr response object of the query, pass to \code{\link{parse_primer_hits}} to parse the results.
 #' @export
 primer_search = function(forward, reverse, num_aligns=500, num_permutations=25, ..., .parallel=FALSE, .progress='none'){
   if(missing(forward) || missing(reverse))

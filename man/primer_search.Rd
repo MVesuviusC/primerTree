@@ -26,7 +26,7 @@ provided by foreach}
 \item{.progress}{name of the progress bar to use, see 'create_progress_bar'}
 }
 \value{
-data.frame of primer hits
+httr response object of the query, pass to \code{\link{parse_primer_hits}} to parse the results.
 }
 \description{
 ambiguity codes, enumerate all possible combinations and combine the
