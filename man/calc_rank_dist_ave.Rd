@@ -2,26 +2,29 @@
 % Please edit documentation in R/primerTree.R
 \name{calc_rank_dist_ave}
 \alias{calc_rank_dist_ave}
-\title{calc_rank_dist_ave
-Summarize 
-pairwise differences.}
+\title{Summarize pairwise differences.}
 \usage{
-calc_rank_dist_ave(x, ranks = common_ranks, ...)
+calc_rank_dist_ave(x, ranks = common_ranks)
 }
 \arguments{
 \item{x}{a primerTree object}
 
 \item{ranks}{ranks to show unique counts for, defaults to the common ranks}
-
-\item{...}{Ignored options}
 }
 \value{
 returns a data frame of results
 }
+\description{
+Summarize pairwise differences.
+}
 \details{
 The purpose of this function is to calculate the average number
-of nucleotide differences between species within a given taxonomic 
+of nucleotide differences between species within each taxa of given taxonomic 
 level. 
+
+For example, at the genus level, the function calculates the average number 
+of nucleotide differences between all species within each genus and reports 
+the mean of those values.
 
 There are several key assumptions and calculations made in this 
 function.
