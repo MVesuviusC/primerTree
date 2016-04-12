@@ -21,26 +21,26 @@ filter_seqs = function(x, ...) UseMethod("filter_seqs")
 #' @describeIn filter_seqs Method for primerTree objects
 #' @export
 filter_seqs.primerTree = function(x, min_length = 0, max_length = Inf, ...) {
-  #if(is.null(primerTreeObj$sequence)) {
+  #if(is.null(x$sequence)) {
   #  print "No sequences in primerTree object"
   #}
   
   # calculate how many removed and print out to screen
-  lengths <- unlist(lapply(primertree_obj$sequence, length))
+  lengths <- vapply(x$sequence, length, integer(1))
   above_max <- lengths >= max_length
   below_min <- lengths <= min_length
   message(sum(below_min), " sequences below ", min_length) # same for min
   message(sum(above_max), " sequences above ", max_length) # same for min
   
   #filter the sequences
-  primertree_obj$sequence <- primertree_obj$sequence[lengths > min_length & lengths < max_length]
+  x$sequence <- x$sequence[lengths >= min_length & lengths <= max_length]
       
   # realign filtered sequences
-  primertree_obj$alignment <- clustalo(primertree_obj$sequence)
+  x$alignment <- clustalo(x$sequence)
   
   # remake tree
-  primertree_obj$tree <- tree_from_alignment(primertree_obj$alignment)
-  primertree_obj
+  x$tree <- tree_from_alignment(x$alignment)
+  x
 }
 
 #' Get a summary of sequence lengths from a primerTree object
@@ -65,7 +65,7 @@ seq_lengths <- function(x,summarize = TRUE) UseMethod("seq_lengths")
 #' @inheritParams seq_lengths
 #' @export
 seq_lengths.primerTree <- function(x, summarize = TRUE) {
-  lengths <- unlist(lapply(x$sequence, length))
+  lengths <- vapply(x$sequence, length, integer(1))
   message("sequence length distribution: ")
   table(as.factor(lengths))
 }
