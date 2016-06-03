@@ -35,7 +35,7 @@ gi2taxid = function(gi){
   #stop if response failed
   stop_for_status(response)
 
-  parsed = content(response, type='text/xml')
+  parsed = xmlParse(content(response, type='text/xml', as="text"))
 
   xpathSApply(parsed, '//LinkSet', parse_LinkSet)
 }
@@ -81,7 +81,7 @@ fetch_taxonomy = function(taxid) {
   #stop if response failed
   stop_for_status(response)
 
-  parse_taxonomy_xml(content(response))
+  parse_taxonomy_xml(xmlParse(content(response, as="text")))
 }
 parse_taxonomy_xml = function(xml){
   rbind.fill(xpathApply(xml, '//TaxaSet/Taxon', parse_taxon))
