@@ -35,7 +35,7 @@ gi2taxid = function(gi){
   #stop if response failed
   stop_for_status(response)
 
-  parsed = xmlParse(content(response, type='text/xml', as="text"))
+  parsed = xmlParse(content(response, as="text"))
 
   xpathSApply(parsed, '//LinkSet', parse_LinkSet)
 }
