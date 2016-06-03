@@ -149,6 +149,10 @@ retry = function(fun, num_retry=5, ...){
 GET_retry = retry(GET)
 POST_retry = retry(POST)
 
+#' Parse the primer hits
+#'
+#' @param response a httr response object obtained from \code{\link{primer_search}}
+#' @export
 parse_primer_hits = function(response){
   content = parsable_html(response)
   rbind.fill(xpathApply(content, '//pre', parse_pre))

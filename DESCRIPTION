@@ -21,7 +21,8 @@ Imports:
     plyr,
     scales,
     stringr,
-    foreach
+    foreach,
+    reshape2
 LazyData: true
 License: GPL-2
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
