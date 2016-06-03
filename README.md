@@ -1,4 +1,5 @@
 # PrimerTree #
+[![Travis-CI Build Status](https://travis-ci.org/jimhester/primerTree.svg?branch=master)](https://travis-ci.org/jimhester/primerTree)
 PrimerTree: Visually Assessing the Specificity and Informativeness of Primer Pairs
 
 * [Features](#features)

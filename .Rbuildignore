@@ -8,3 +8,4 @@
 ^.*\.bib$
 ^test\.fa$
 ^.*\.html$
+^\.travis\.yml$
