@@ -81,7 +81,7 @@ print_options = function(options){
 BLAST_primer = function(forward, reverse, ..., organism='',
   primer_specificity_database='nt', exclude_env='on'){
 
-  url = 'http://www.ncbi.nlm.nih.gov/tools/primer-blast/'
+  url = 'https://www.ncbi.nlm.nih.gov/tools/primer-blast/'
   form = GET_retry(url)
 
   content = parsable_html(form)

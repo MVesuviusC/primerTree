@@ -15,7 +15,7 @@
 
 get_sequence = function(gi, start=NULL, stop=NULL){
 
-  fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
+  fetch_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
   query=list(db='nuccore', rettype='fasta', retmode='text', id=gi)
 
