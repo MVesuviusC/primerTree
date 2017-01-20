@@ -20,12 +20,12 @@ install.packages('primerTree')
 ```
 #### Github ####
 ```s
-library(devtools)
-install_github(user='jimhester', repo='primerTree')
+# install.packages("devtools")
+devtools::install_github("jimhester/primerTree")
 ```
 ### [Clustal Omega](http://www.clustal.org/omega/#Download) Installation ###
 #### Windows ####
-Use the precompiled windows binary.  Either put the installed clustalo.exe in your path, or pass the path to the executable in the clustal_options option
+Use the pre-compiled windows binary.  Either put the installed clustalo.exe in your path, or pass the path to the executable in the clustal_options option
 ```s
 library(primerTree)
 mammals_16S = search_primer_pair(name='Mammals 16S',
@@ -36,7 +36,7 @@ Simple installation from source
 ```bash
 ./configure && make && make install
 ```
-If the resulting clustalo program is in your path it should just work,
+If the resulting clustalo program is in your path it should be automatically found,
 otherwise see the windows instructions on how to specify the path to the
 executable.
 
