@@ -11,7 +11,7 @@
 #' @name primerTree
 #' @docType package
 #' @import ggplot2 XML ape httr plyr directlabels gridExtra
-#'   stringr foreach 
+#'   stringr foreach
 #' @importFrom lubridate %--% seconds now
 #' @importFrom grid grid.locator
 #' @importFrom scales expand_range
@@ -250,7 +250,7 @@ summary.primerTree <- function(object, ..., probs=c(0, .05, .5, .95, 1), ranks =
   res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   cat('\n')
   print(res[['distances']])
-  
+
   res[['rankDistances']] = calc_rank_dist_ave(object, common_ranks)
   print(res[['rankDistances']])
 
@@ -270,40 +270,40 @@ labeled_quantile = function(x, labels, ...){
 
 #' Summarize pairwise differences.
 
-#' @param x a primerTree object 
+#' @param x a primerTree object
 #' @param ranks ranks to show unique counts for, defaults to the common ranks
 #' @return returns a data frame of results
-#' @details 
+#' @details
 #' The purpose of this function is to calculate the average number
-#' of nucleotide differences between species within each taxa of given taxonomic 
-#' level. 
-#' 
-#' For example, at the genus level, the function calculates the average number 
-#' of nucleotide differences between all species within each genus and reports 
+#' of nucleotide differences between species within each taxa of given taxonomic
+#' level.
+#'
+#' For example, at the genus level, the function calculates the average number
+#' of nucleotide differences between all species within each genus and reports
 #' the mean of those values.
-#' 
-#' There are several key assumptions and calculations made in this 
+#'
+#' There are several key assumptions and calculations made in this
 #' function.
-#' 
+#'
 #' First, the function randomly selects one sequence from each species
 #' in the primerTree results. This is to keep any one species (e.g.
 #' human, cow, etc.) with many hits from skewing the results.
-#' 
+#'
 #' Second, for each taxonomic level tested, the function divides the
-#' sequences by each taxon at that level and calculates the mean 
+#' sequences by each taxon at that level and calculates the mean
 #' number of nucleotide differences within that taxa, then returns the
-#' mean of those values. 
-#' 
-#' Third, when calculating the average distance, any taxa for which 
+#' mean of those values.
+#'
+#' Third, when calculating the average distance, any taxa for which
 #' there is only one species is omitted, as the number of nucleotide
 #' differences will always be 0.
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' calc_rank_dist_ave(mammals_16S)
-#' 
+#'
 #' calc_rank_dist_ave(bryophytes_trnL)
-#' 
+#'
 #' # Note that the differences between the results from these two primers
 #' # the mean nucleotide differences is much higher for the mammal primers
 #' # than the byrophyte primers. This suggests that the mammal primers have
@@ -312,7 +312,7 @@ labeled_quantile = function(x, labels, ...){
 #' @importFrom reshape2 melt
 #' @export
 
-# using tree data format info from http://www.phytools.org/eqg/Exercise_3.2/ 
+# using tree data format info from http://www.phytools.org/eqg/Exercise_3.2/
 calc_rank_dist_ave <- function(x, ranks = common_ranks) {
   used_ranks <- grep("species", ranks, invert = T, value = T)
   rank_dist_mean <- data.frame(matrix(nrow = 1, ncol = 0))
@@ -320,7 +320,7 @@ calc_rank_dist_ave <- function(x, ranks = common_ranks) {
   # Raw taxonomy data
   taxa <- as.data.frame(x$taxonomy)
 
-  # Randomize the order of the taxa data frame 
+  # Randomize the order of the taxa data frame
   taxa <- taxa[sample(nrow(taxa)), ]
   rownames(taxa) <- taxa$gi
 
@@ -368,16 +368,16 @@ calc_rank_dist_ave <- function(x, ranks = common_ranks) {
 
     # Drop all columns except the three needed
     melted_sub <- melted_sub[ , colnames(melted_sub) %in% c("rank2", "dist", "rank1", "species")]
-    
+
     # Drop all rows with missing information
     melted_sub <- na.omit(melted_sub)
 
-    # We only want distances within a taxa, so drop all comparisons between taxa 
+    # We only want distances within a taxa, so drop all comparisons between taxa
     # We also want to drop any comparisons of a species to itself, which will have dist == 0
     melted_sub <- melted_sub[melted_sub$rank1 == melted_sub$rank2 & melted_sub$species != melted_sub$species.1, ]
 
     # Calculate the mean distance for each taxa compared
-    #   We calculate each separately to avoid any one taxa with lots of hits (like human seqs) 
+    #   We calculate each separately to avoid any one taxa with lots of hits (like human seqs)
     #   from skewing the mean
     melted_sub$group <- paste(melted_sub$rank1, melted_sub$rank2)
 
