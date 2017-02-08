@@ -356,7 +356,7 @@ calc_rank_dist_ave <- function(x, ranks = common_ranks) {
     # Pull the nucleotide distance data in
     # Replace the rank1 gi with the rank1 taxa
     melted_sub <- join(melted, unique_factors_sub,by = "gi")
-    melted_sub$rank1 <- melted_sub[[rank]]
+    melted_sub$rank1 <- as.factor(melted_sub[[rank]])
 
     # Drop all columns except the three needed so the next join doesn't get messed up
     melted_sub <- melted_sub[, colnames(melted_sub) %in% c("gi2", "dist", "rank1", "species")]
@@ -364,10 +364,13 @@ calc_rank_dist_ave <- function(x, ranks = common_ranks) {
 
     # Replace the rank2 gi with the rank2 taxa
     melted_sub <- join(melted_sub, unique_factors_sub, by = "gi")
-    melted_sub$rank2 <- melted_sub[[rank]]
+    melted_sub$rank2 <- as.factor(melted_sub[[rank]])
 
     # Drop all columns except the three needed
     melted_sub <- melted_sub[ , colnames(melted_sub) %in% c("rank2", "dist", "rank1", "species")]
+    
+    # Drop all rows with missing information
+    melted_sub <- na.omit(melted_sub)
 
     # We only want distances within a taxa, so drop all comparisons between taxa 
     # We also want to drop any comparisons of a species to itself, which will have dist == 0
