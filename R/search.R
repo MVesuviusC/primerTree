@@ -237,7 +237,7 @@ parse_attributes = function(x){
   as.data.frame(t(xmlAttrs(x)))
 }
 parsable_html = function(response){
-  txt <- content(response, as='text')
+  txt <- content(response, as='text', encoding='UTF-8')
 
   # remove any unicode characters
   Encoding(txt) <- "UTF-8"
