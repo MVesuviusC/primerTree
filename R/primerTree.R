@@ -180,7 +180,7 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
               ' length:', ncol(primer_search$alignment))
 
       start_time = now()
-      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment, distance_options)))
+      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment), distance_options))
       message('pairwise DNA distances calculated in ',
               seconds_elapsed_text(start_time))
 
