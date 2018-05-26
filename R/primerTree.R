@@ -151,6 +151,8 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
       primer_search$BLAST_result =
         filter_duplicates(ldply(primer_search$response, parse_primer_hits, .parallel=.parallel))
 
+      primer_search$BLAST_result$gi <- as.character(primer_search$BLAST_result$gi)
+      
       message(nrow(primer_search$BLAST_result), ' BLAST alignments parsed in ', seconds_elapsed_text(start_time))
 
       start_time = now()
