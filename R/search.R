@@ -48,7 +48,8 @@ enumerate_primers = function(forward, reverse){
   forward_primers = enumerate_ambiguity(forward)
   data.frame(forward=forward_primers,
              reverse=rep(enumerate_ambiguity(reverse),
-                         each=length(forward_primers)))
+                         each=length(forward_primers)),
+             stringsAsFactors = FALSE)
 }
 enumerate_ambiguity = function(sequence){
   search_regex = paste(names(iupac), collapse='|')

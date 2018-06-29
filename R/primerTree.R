@@ -151,6 +151,8 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
       primer_search$BLAST_result =
         filter_duplicates(ldply(primer_search$response, parse_primer_hits, .parallel=.parallel))
 
+      primer_search$BLAST_result$gi <- as.character(primer_search$BLAST_result$gi)
+      
       message(nrow(primer_search$BLAST_result), ' BLAST alignments parsed in ', seconds_elapsed_text(start_time))
 
       start_time = now()
@@ -178,7 +180,7 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
               ' length:', ncol(primer_search$alignment))
 
       start_time = now()
-      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment, distance_options)))
+      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment), distance_options))
       message('pairwise DNA distances calculated in ',
               seconds_elapsed_text(start_time))
 
