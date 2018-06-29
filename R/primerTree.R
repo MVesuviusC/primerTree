@@ -249,7 +249,7 @@ summary.primerTree <- function(object, ..., probs=c(0, .05, .5, .95, 1), ranks =
   res[['lengths']] = t(data.frame('Sequence lengths'=labeled_quantile(laply(object$sequence, length), sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   print(res[['lengths']])
 
-  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
+  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distances, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   cat('\n')
   print(res[['distances']])
 
