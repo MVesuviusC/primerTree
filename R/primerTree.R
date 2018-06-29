@@ -18,7 +18,7 @@
 #' @importFrom grDevices dev.cur dev.off dev.set pdf
 #' @importFrom stats na.omit quantile
 #' @importFrom utils capture.output
-#' @useDynLib primerTree
+#' @useDynLib primerTree rawStreamToDNAbin
 NULL
 
 #' PrimerTree results for the mammalian 16S primers
