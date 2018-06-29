@@ -23,4 +23,3 @@ Calls clustal omega to align a set of sequences of class DNAbin.  Run
 without any arguments to see all the options you can pass to the command
 line clustal omega.
 }
-

@@ -34,4 +34,3 @@ plot(mammals_16S, 'none')
 \seealso{
 \code{\link{plot_tree_ranks}}, \code{\link{plot_tree}}
 }
-

@@ -25,4 +25,3 @@ invisibly returns a list containing the printed results
 Summarize a primerTree result, printing quantiles of sequence length and
 pairwise differences.
 }
-

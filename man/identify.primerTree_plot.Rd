@@ -16,4 +16,3 @@ only works on single ranks}
 identify the point closest to the mouse click
 only works on single ranks
 }
-

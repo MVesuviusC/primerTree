@@ -14,4 +14,3 @@
 \description{
 Method for primerTree objects
 }
-

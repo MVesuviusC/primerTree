@@ -12,4 +12,3 @@ primerTree object of the search results
 \code{\link{plot.primerTree}} a S3 method for plotting the primerTree object
 obtained using \code{\link{search_primer_pair}}
 }
-

@@ -12,4 +12,3 @@ parse_primer_hits(response)
 \description{
 Parse the primer hits
 }
-

@@ -32,10 +32,10 @@ unwanted reads.
 \itemize{
 \item \code{primerTree}: Method for primerTree objects
 }}
+
 \examples{
 \dontrun{
 # filter out sequences longer or shorter than desired:
 mammals_16S_filtered <- filter_seqs(mammals_16S, min_length=131, max_length=156)
 }
 }
-

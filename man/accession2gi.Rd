@@ -15,4 +15,3 @@ named vector of gis.
 \description{
 Maps a genbank accession to a nuclotide database gi.
 }
-
