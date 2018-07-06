@@ -47,4 +47,3 @@ plot_tree_ranks(mammals_16S$tree, mammals_16S$taxonomy,
 \code{\link{plot_tree}} to plot only a single rank or the just the
 tree layout.
 }
-

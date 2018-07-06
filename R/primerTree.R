@@ -18,7 +18,7 @@
 #' @importFrom grDevices dev.cur dev.off dev.set pdf
 #' @importFrom stats na.omit quantile
 #' @importFrom utils capture.output
-#' @useDynLib primerTree
+#' @useDynLib primerTree rawStreamToDNAbin
 NULL
 
 #' PrimerTree results for the mammalian 16S primers
@@ -180,7 +180,7 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
               ' length:', ncol(primer_search$alignment))
 
       start_time = now()
-      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment, distance_options)))
+      primer_search$distances = do.call(dist.dna, c(list(primer_search$alignment), distance_options))
       message('pairwise DNA distances calculated in ',
               seconds_elapsed_text(start_time))
 
@@ -249,7 +249,7 @@ summary.primerTree <- function(object, ..., probs=c(0, .05, .5, .95, 1), ranks =
   res[['lengths']] = t(data.frame('Sequence lengths'=labeled_quantile(laply(object$sequence, length), sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   print(res[['lengths']])
 
-  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distance, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
+  res[['distances']] = t(data.frame('Pairwise differences'=labeled_quantile(object$distances, sprintf('%.0f%%', probs*100), probs=probs), check.names=F))
   cat('\n')
   print(res[['distances']])
 

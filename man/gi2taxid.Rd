@@ -15,4 +15,3 @@ named vector of taxIds.
 \description{
 Maps a nucleotide database gi to a taxonomy database taxId
 }
-

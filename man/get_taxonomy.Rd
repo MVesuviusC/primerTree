@@ -15,4 +15,3 @@ data.frame of the 'gis, taxIds, and taxonomy
 \description{
 Retrieve the taxonomy information from NCBI for a set of nucleotide gis.
 }
-

@@ -32,4 +32,3 @@ httr response object of the query, pass to \code{\link{parse_primer_hits}} to pa
 ambiguity codes, enumerate all possible combinations and combine the
 results.
 }
-

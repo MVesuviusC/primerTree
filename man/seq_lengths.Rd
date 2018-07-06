@@ -29,4 +29,3 @@ barplot(seqLengths,
  xlab="Amplicon length (in bp)", 
  ylab=("Frequency"))
 }
-

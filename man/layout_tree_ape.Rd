@@ -22,4 +22,3 @@ as well as ids for the edges}
 layout a tree using ape, return an object to be plotted by
 \code{\link{plot_tree}}
 }
-

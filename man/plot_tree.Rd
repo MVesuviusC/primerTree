@@ -35,4 +35,3 @@ plot to be printed.
 \description{
 plots a tree, optionally with colored and labeled points by taxonomic rank
 }
-

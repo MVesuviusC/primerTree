@@ -20,4 +20,3 @@ Construct a neighbor joining tree from a dna alignment
 \seealso{
 \code{\link{dist.dna}}, \code{\link{nj}}
 }
-

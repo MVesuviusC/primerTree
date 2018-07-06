@@ -70,4 +70,3 @@ mammals_16S = search_primer_pair(name='Mammals 16S',
 \seealso{
 \code{\link{primer_search}}, \code{\link{clustalo}}
 }
-

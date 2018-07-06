@@ -19,14 +19,14 @@ Summarize pairwise differences.
 }
 \details{
 The purpose of this function is to calculate the average number
-of nucleotide differences between species within each taxa of given taxonomic 
-level. 
+of nucleotide differences between species within each taxa of given taxonomic
+level.
 
-For example, at the genus level, the function calculates the average number 
-of nucleotide differences between all species within each genus and reports 
+For example, at the genus level, the function calculates the average number
+of nucleotide differences between all species within each genus and reports
 the mean of those values.
 
-There are several key assumptions and calculations made in this 
+There are several key assumptions and calculations made in this
 function.
 
 First, the function randomly selects one sequence from each species
@@ -34,11 +34,11 @@ in the primerTree results. This is to keep any one species (e.g.
 human, cow, etc.) with many hits from skewing the results.
 
 Second, for each taxonomic level tested, the function divides the
-sequences by each taxon at that level and calculates the mean 
+sequences by each taxon at that level and calculates the mean
 number of nucleotide differences within that taxa, then returns the
-mean of those values. 
+mean of those values.
 
-Third, when calculating the average distance, any taxa for which 
+Third, when calculating the average distance, any taxa for which
 there is only one species is omitted, as the number of nucleotide
 differences will always be 0.
 }
@@ -54,4 +54,3 @@ calc_rank_dist_ave(bryophytes_trnL)
 # better resolution to distinguish individual species.
 }
 }
-

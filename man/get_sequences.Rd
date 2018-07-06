@@ -33,4 +33,3 @@ Retrieves fasta sequences from NCBI nucleotide database.
 \seealso{
 \code{\link{DNAbin}}
 }
-
