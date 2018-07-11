@@ -94,6 +94,8 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #'    \code{link{clustalo}} for a list of options
 #' @param distance_options a list of options to pass to dist.dna, see
 #'    \code{link{dist.dna}} for a list of options
+#' @param min_length the minimum alignment length of a BLAST result allowed
+#' @param max_length the maximum alignment length of a BLAST result allowed
 #' @inheritParams primer_search
 #' @return A list with the following elements,
 #' \item{name}{name of the primer pair}
@@ -117,7 +119,8 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #'  num_aligns=1000, total_primer_specificity_mismatch=3)
 #' }
 search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
-    num_permutations=25, simplify=TRUE, clustal_options=list(), distance_options=list(model="N", pairwise.deletion=T),
+    num_permutations=25, simplify=TRUE, clustal_options=list(), 
+    distance_options=list(model="N", pairwise.deletion=T), min_length=1, max_length=Inf,
     ..., .parallel=FALSE, .progress='none'){
 
   #HACK, primerTree is an environment rather than a list so we can treat it as
@@ -150,7 +153,16 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
       start_time = now()
       primer_search$BLAST_result =
         filter_duplicates(ldply(primer_search$response, parse_primer_hits, .parallel=.parallel))
-
+      
+      num_too_short <- sum(primer_search$BLAST_result$product_length < min_length)
+      num_too_long <- sum(primer_search$BLAST_result$product_length > max_length)
+      if(num_too_short != 0 | num_too_long != 0) {
+        message(num_too_short, " BLAST alignments too short.")
+        message(num_too_long, " BLAST alignments too long.")
+        primer_search$BLAST_result <- subset(primer_search$BLAST_result, 
+                                              product_length >= min_length & product_length <= max_length)
+      }
+      
       primer_search$BLAST_result$gi <- as.character(primer_search$BLAST_result$gi)
       
       message(nrow(primer_search$BLAST_result), ' BLAST alignments parsed in ', seconds_elapsed_text(start_time))

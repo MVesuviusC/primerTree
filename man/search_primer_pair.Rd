@@ -8,8 +8,9 @@ a multiple alignment of the products}
 \usage{
 search_primer_pair(forward, reverse, name = NULL, num_aligns = 500,
   num_permutations = 25, simplify = TRUE, clustal_options = list(),
-  distance_options = list(model = "N", pairwise.deletion = T), ...,
-  .parallel = FALSE, .progress = "none")
+  distance_options = list(model = "N", pairwise.deletion = T),
+  min_length = 1, max_length = Inf, ..., .parallel = FALSE,
+  .progress = "none")
 }
 \arguments{
 \item{forward}{forward primer to search by 5'-3' on plus strand}
@@ -31,6 +32,10 @@ sampled from all possible permutations.}
 
 \item{distance_options}{a list of options to pass to dist.dna, see
 \code{link{dist.dna}} for a list of options}
+
+\item{min_length}{the minimum alignment length of a BLAST result allowed}
+
+\item{max_length}{the maximum alignment length of a BLAST result allowed}
 
 \item{...}{additional arguments passed to Primer-Blast}
 
