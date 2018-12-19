@@ -23,6 +23,8 @@ Imports:
     stringr,
     foreach,
     reshape2
+Suggests:
+    RCurl
 LazyData: true
 License: GPL-2
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
