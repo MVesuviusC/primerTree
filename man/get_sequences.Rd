@@ -4,8 +4,8 @@
 \alias{get_sequences}
 \title{Retrieves fasta sequences from NCBI nucleotide database.}
 \usage{
-get_sequences(gi, start = NULL, stop = NULL, simplify = TRUE,
-  .parallel = FALSE, .progress = "none")
+get_sequences(gi, start = NULL, stop = NULL, api_key = NULL,
+  simplify = TRUE, .parallel = FALSE, .progress = "none")
 }
 \arguments{
 \item{gi}{the gi number of the sequence to retrieve}
@@ -15,6 +15,8 @@ beginning of the sequence.}
 
 \item{stop}{stop bases to retrieve, numbered beginning at 1. if NULL the stop of
 the sequence.}
+
+\item{api_key}{NCBI api-key to allow faster sequence retrieval.}
 
 \item{simplify}{simplify the FASTA headers to include only the genbank
 accession.}

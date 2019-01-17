@@ -9,11 +9,12 @@
 
 #' @param stop last base to retrieve, numbered beginning at 1. if NULL the end of
 #'        the sequence.
+#' @param api_key NCBI api-key to allow faster sequence retrieval.
 #' @return an DNAbin object.
 #' @seealso \code{\link{DNAbin}}
 #' @export
 
-get_sequence = function(gi, start=NULL, stop=NULL){
+get_sequence = function(gi, start=NULL, stop=NULL, api_key=NULL){
 
   fetch_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
@@ -24,6 +25,9 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 
   if(!is.null(stop))
     query$seq_stop = stop
+
+  if(!is.null(api_key))
+    query$api_key = api_key
 
   response = POST_retry(fetch_url, body=query)
 
@@ -47,6 +51,7 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 
 #' @param stop stop bases to retrieve, numbered beginning at 1. if NULL the stop of
 #'        the sequence.
+#' @param api_key NCBI api-key to allow faster sequence retrieval.
 #' @param simplify simplify the FASTA headers to include only the genbank
 #'        accession.
 #' @param .parallel if 'TRUE', perform in parallel, using parallel backend
@@ -56,15 +61,32 @@ get_sequence = function(gi, start=NULL, stop=NULL){
 #' @seealso \code{\link{DNAbin}}
 #' @export
 
-get_sequences = function(gi, start=NULL, stop=NULL, simplify=TRUE, .parallel=FALSE, .progress='none'){
+get_sequences = function(gi, start=NULL, stop=NULL, api_key=NULL, simplify=TRUE, .parallel=FALSE, .progress='none'){
   #expand arguments by recycling
   args = expand_arguments(gi=gi, start=start, stop=stop)
   #assign expanded arguments to actual arguments
   lapply(seq_along(args), function(i) names(args)[i] <<- args[i])
 
+  #define rate to query NCBI servers with get_sequences
+  query_rate <- 3; #queries per second
+
+  if(!is.null(api_key)) {
+    query_rate <- 10  
+  } else {
+    warning("\n\nSequence retrieval limited to 3 per second. Provide an api_key to increase this to 10. See: 
+    https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/\n\n", immediate = T)
+  }
+
   size = length(gi)
   get_sequence_itr = function(i){
-    sequence = get_sequence(gi[i], start[i], stop[i])
+    start_time <- Sys.time()
+    sequence = get_sequence(gi[i], start[i], stop[i], api_key)
+    stop_time <- Sys.time()
+    if((stop_time - start_time) < (1 / query_rate)) {
+      #sleep to limit query rate :-(
+      Sys.sleep((1/query_rate) - (stop_time - start_time))
+    }
+    sequence
   }
   sequences = alply(seq_along(gi), .margins=1, .parallel=.parallel, .progress=.progress, failwith(NA, f=get_sequence_itr))
   names = if(simplify) gi else laply(sequences, names)

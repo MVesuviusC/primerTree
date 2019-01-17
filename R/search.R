@@ -142,6 +142,8 @@ retry = function(fun, num_retry=5, ...){
       res = fun(...)
       status = http_status(res)
       itr = itr + 1
+      #sleep to avoid hitting NCBI query rate limit :'-(
+      Sys.sleep(0.4)
     }
     res
   }

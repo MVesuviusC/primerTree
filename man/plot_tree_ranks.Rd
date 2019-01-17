@@ -5,8 +5,8 @@
 \title{plots a tree along with a series of taxonomic ranks}
 \usage{
 plot_tree_ranks(tree, taxonomy, main = NULL, type = "unrooted",
-  ranks = common_ranks, size = 2, guide_size = NULL, legend_cutoff = 25,
-  ...)
+  ranks = common_ranks, size = 2, guide_size = NULL,
+  legend_cutoff = 25, ...)
 }
 \arguments{
 \item{tree}{to be plotted, use layout_tree to layout tree.}
