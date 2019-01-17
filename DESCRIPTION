@@ -5,8 +5,8 @@ Author: Jim Hester
 Title: Visually Assessing the Specificity and Informativeness of Primer
     Pairs
 Description: Identifies potential target sequences for a given set of primers
-  and generates phylogenetic trees annotated with the taxonomies of the predicted
-  amplification products.
+    and generates phylogenetic trees annotated with the taxonomies of the predicted
+    amplification products.
 Depends:
     R (>= 3.0.0),
     directlabels,
@@ -28,4 +28,5 @@ Suggests:
 LazyData: true
 License: GPL-2
 Packaged: 2013-06-03 13:51:16 UTC; hesterj
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8

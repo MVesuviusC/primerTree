@@ -94,6 +94,7 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #'    \code{link{clustalo}} for a list of options
 #' @param distance_options a list of options to pass to dist.dna, see
 #'    \code{link{dist.dna}} for a list of options
+#' @param api_key NCBI api-key to allow faster sequence retrieval
 #' @inheritParams primer_search
 #' @return A list with the following elements,
 #' \item{name}{name of the primer pair}
@@ -117,7 +118,8 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #'  num_aligns=1000, total_primer_specificity_mismatch=3)
 #' }
 search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
-    num_permutations=25, simplify=TRUE, clustal_options=list(), distance_options=list(model="N", pairwise.deletion=T),
+    num_permutations=25, simplify=TRUE, clustal_options=list(), 
+    distance_options=list(model="N", pairwise.deletion=T), api_key=NULL,
     ..., .parallel=FALSE, .progress='none'){
 
   #HACK, primerTree is an environment rather than a list so we can treat it as
@@ -163,6 +165,7 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
       primer_search$sequence = get_sequences(primer_search$BLAST_result$gi,
                                              primer_search$BLAST_result$product_start,
                                              primer_search$BLAST_result$product_stop,
+					     api_key=api_key,
                                              simplify=simplify,
                                              .parallel=.parallel)
 

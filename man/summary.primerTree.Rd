@@ -5,8 +5,8 @@
 \title{Summarize a primerTree result, printing quantiles of sequence length and
 pairwise differences.}
 \usage{
-\method{summary}{primerTree}(object, ..., probs = c(0, 0.05, 0.5, 0.95, 1),
-  ranks = common_ranks)
+\method{summary}{primerTree}(object, ..., probs = c(0, 0.05, 0.5, 0.95,
+  1), ranks = common_ranks)
 }
 \arguments{
 \item{object}{the primerTree object to summarise}

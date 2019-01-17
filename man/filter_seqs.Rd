@@ -9,7 +9,8 @@ unwanted reads.}
 \usage{
 filter_seqs(x, ...)
 
-\method{filter_seqs}{primerTree}(x, min_length = 0, max_length = Inf, ...)
+\method{filter_seqs}{primerTree}(x, min_length = 0, max_length = Inf,
+  ...)
 }
 \arguments{
 \item{x}{a primerTree object}
