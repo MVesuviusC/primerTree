@@ -73,8 +73,8 @@ get_sequences = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API
   if(nzchar(api_key)) {
     query_rate <- 10
   } else {
-    warning("\n\nSequence retrieval limited to 3 per second. Provide an api_key to increase this to 10. See: 
-    https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/\n\n", immediate = T)
+    warning("Sequence retrieval limited to 3 per second. Provide an api_key to increase this to 10. See:
+  https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/", immediate. = TRUE)
   }
 
   size = length(gi)
@@ -99,7 +99,7 @@ get_sequences = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API
 expand_arguments <- function(...){
   dotList <- list(...)
   max.length <- max(sapply(dotList, length))
-  lapply(dotList, rep, length=max.length)
+  suppressWarnings(lapply(dotList, rep, length=max.length))
 }
 #' Construct a neighbor joining tree from a dna alignment
 #'
