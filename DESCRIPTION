@@ -26,6 +26,5 @@ Imports:
     RCurl
 LazyData: true
 License: GPL-2
-Packaged: 2013-06-03 13:51:16 UTC; hesterj
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8

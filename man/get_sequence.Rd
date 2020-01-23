@@ -4,7 +4,12 @@
 \alias{get_sequence}
 \title{Retrieves a fasta sequence from NCBI nucleotide database.}
 \usage{
-get_sequence(gi, start = NULL, stop = NULL, api_key = NULL)
+get_sequence(
+  gi,
+  start = NULL,
+  stop = NULL,
+  api_key = Sys.getenv("NCBI_API_KEY")
+)
 }
 \arguments{
 \item{gi}{nucleotide gi to retrieve.}

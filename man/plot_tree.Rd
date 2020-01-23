@@ -4,8 +4,17 @@
 \alias{plot_tree}
 \title{plots a tree, optionally with colored and labeled points by taxonomic rank}
 \usage{
-plot_tree(tree, type = "unrooted", main = NULL, guide_size = NULL,
-  rank = NULL, taxonomy = NULL, size = 2, legend_cutoff = 25, ...)
+plot_tree(
+  tree,
+  type = "unrooted",
+  main = NULL,
+  guide_size = NULL,
+  rank = NULL,
+  taxonomy = NULL,
+  size = 2,
+  legend_cutoff = 25,
+  ...
+)
 }
 \arguments{
 \item{tree}{to be plotted, use layout_tree to layout tree.}

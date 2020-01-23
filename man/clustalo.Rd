@@ -4,8 +4,7 @@
 \alias{clustalo}
 \title{Multiple sequence alignment with clustal omega}
 \usage{
-clustalo(x, exec = "clustalo", quiet = TRUE,
-  original.ordering = TRUE, ...)
+clustalo(x, exec = "clustalo", quiet = TRUE, original.ordering = TRUE, ...)
 }
 \arguments{
 \item{x}{an object of class 'DNAbin'}

@@ -6,10 +6,20 @@
 results, their product sequences, the taxonomic information for the sequences,
 a multiple alignment of the products}
 \usage{
-search_primer_pair(forward, reverse, name = NULL, num_aligns = 500,
-  num_permutations = 25, simplify = TRUE, clustal_options = list(),
+search_primer_pair(
+  forward,
+  reverse,
+  name = NULL,
+  num_aligns = 500,
+  num_permutations = 25,
+  simplify = TRUE,
+  clustal_options = list(),
   distance_options = list(model = "N", pairwise.deletion = T),
-  api_key = NULL, ..., .parallel = FALSE, .progress = "none")
+  api_key = Sys.getenv("NCBI_API_KEY"),
+  ...,
+  .parallel = FALSE,
+  .progress = "none"
+)
 }
 \arguments{
 \item{forward}{forward primer to search by 5'-3' on plus strand}

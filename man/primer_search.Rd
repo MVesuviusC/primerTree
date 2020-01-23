@@ -4,8 +4,15 @@
 \alias{primer_search}
 \title{Query a pair of primers using ncbi's Primer-BLAST, if primers contain iupac}
 \usage{
-primer_search(forward, reverse, num_aligns = 500,
-  num_permutations = 25, ..., .parallel = FALSE, .progress = "none")
+primer_search(
+  forward,
+  reverse,
+  num_aligns = 500,
+  num_permutations = 25,
+  ...,
+  .parallel = FALSE,
+  .progress = "none"
+)
 }
 \arguments{
 \item{forward}{forward primer to search by 5'-3' on plus strand}

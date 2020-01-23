@@ -3,7 +3,6 @@
 \docType{package}
 \name{primerTree}
 \alias{primerTree}
-\alias{primerTree-package}
 \title{\pkg{primerTree} Visually Assessing the Specificity and Informativeness of Primer Pairs}
 \description{
 \code{primerTree} has two main commands:
