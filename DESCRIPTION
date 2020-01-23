@@ -1,5 +1,5 @@
 Package: primerTree
-Version: 1.0.4
+Version: 1.0.5
 Maintainer: Jim Hester <james.f.hester@gmail.com>
 Author: Jim Hester
 Title: Visually Assessing the Specificity and Informativeness of Primer
@@ -22,8 +22,7 @@ Imports:
     scales,
     stringr,
     foreach,
-    reshape2
-Suggests:
+    reshape2,
     RCurl
 LazyData: true
 License: GPL-2
