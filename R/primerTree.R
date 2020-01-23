@@ -119,7 +119,7 @@ plot.primerTree = function(x, ranks=NULL, main=NULL, ...){
 #' }
 search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
     num_permutations=25, simplify=TRUE, clustal_options=list(), 
-    distance_options=list(model="N", pairwise.deletion=T), api_key=NULL,
+    distance_options=list(model="N", pairwise.deletion=T), api_key=Sys.getenv("NCBI_API_KEY"),
     ..., .parallel=FALSE, .progress='none'){
 
   #HACK, primerTree is an environment rather than a list so we can treat it as
@@ -165,7 +165,7 @@ search_primer_pair = function(forward, reverse, name=NULL, num_aligns=500,
       primer_search$sequence = get_sequences(primer_search$BLAST_result$gi,
                                              primer_search$BLAST_result$product_start,
                                              primer_search$BLAST_result$product_stop,
-					     api_key=api_key,
+                                             api_key=api_key,
                                              simplify=simplify,
                                              .parallel=.parallel)
 

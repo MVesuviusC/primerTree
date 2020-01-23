@@ -14,7 +14,7 @@
 #' @seealso \code{\link{DNAbin}}
 #' @export
 
-get_sequence = function(gi, start=NULL, stop=NULL, api_key=NULL){
+get_sequence = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_KEY")){
 
   fetch_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
@@ -26,7 +26,7 @@ get_sequence = function(gi, start=NULL, stop=NULL, api_key=NULL){
   if(!is.null(stop))
     query$seq_stop = stop
 
-  if(!is.null(api_key))
+  if(nzchar(api_key))
     query$api_key = api_key
 
   response = POST_retry(fetch_url, body=query)
@@ -61,7 +61,7 @@ get_sequence = function(gi, start=NULL, stop=NULL, api_key=NULL){
 #' @seealso \code{\link{DNAbin}}
 #' @export
 
-get_sequences = function(gi, start=NULL, stop=NULL, api_key=NULL, simplify=TRUE, .parallel=FALSE, .progress='none'){
+get_sequences = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_KEY"), simplify=TRUE, .parallel=FALSE, .progress='none'){
   #expand arguments by recycling
   args = expand_arguments(gi=gi, start=start, stop=stop)
   #assign expanded arguments to actual arguments
@@ -70,8 +70,8 @@ get_sequences = function(gi, start=NULL, stop=NULL, api_key=NULL, simplify=TRUE,
   #define rate to query NCBI servers with get_sequences
   query_rate <- 3; #queries per second
 
-  if(!is.null(api_key)) {
-    query_rate <- 10  
+  if(nzchar(api_key)) {
+    query_rate <- 10
   } else {
     warning("\n\nSequence retrieval limited to 3 per second. Provide an api_key to increase this to 10. See: 
     https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/\n\n", immediate = T)
