@@ -40,6 +40,24 @@ If the resulting clustalo program is in your path it should be automatically fou
 otherwise see the windows instructions on how to specify the path to the
 executable.
 
+#### Mac OSX ####
+Clustal Omega can be installed from source but requires Xcode CLT and argtable, which are not pre-installed on OSX.
+
+First install Xcode CLT.
+```bash
+xcode-select --install
+```
+then install argtable
+```bash
+brew install argtable
+```
+Now you can install Clustal Omega from source.
+From the clustalo directory:
+
+```bash
+./configure && sudo make install
+```
+
 ## Usage ##
 Simple search for a Mammal 16S primer
 ```s
