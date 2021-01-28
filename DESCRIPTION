@@ -1,30 +1,36 @@
 Package: primerTree
+Title: Visually Assessing the Specificity and Informativeness of
+    Primer Pairs
 Version: 1.0.5
-Maintainer: Jim Hester <james.f.hester@gmail.com>
-Author: Jim Hester
-Title: Visually Assessing the Specificity and Informativeness of Primer
-    Pairs
-Description: Identifies potential target sequences for a given set of primers
-    and generates phylogenetic trees annotated with the taxonomies of the predicted
-    amplification products.
+Authors@R: 
+    c(person(given = "Jim",
+          family = "Hester",
+          role = c("aut", "cre"),
+          email = "james.hester@gmail.com"),
+      person(given = "Matt",
+        family = "Cannon",
+        role = "aut"))
+Description: Identifies potential target sequences for a given
+    set of primers and generates phylogenetic trees annotated with the
+    taxonomies of the predicted amplification products.
+License: GPL-2
 Depends:
-    R (>= 3.0.0),
     directlabels,
-    gridExtra
+    gridExtra,
+    R (>= 3.0.0)
 Imports:
+    ape,
+    foreach,
     ggplot2,
     grid,
-    XML,
-    ape,
     httr,
     lubridate,
     plyr,
+    RCurl,
+    reshape2,
     scales,
     stringr,
-    foreach,
-    reshape2,
-    RCurl
-LazyData: true
-License: GPL-2
-RoxygenNote: 7.0.2
+    XML
 Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
