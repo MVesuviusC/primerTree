@@ -4,13 +4,13 @@
 \alias{get_taxonomy}
 \title{Retrieve the taxonomy information from NCBI for a set of nucleotide gis.}
 \usage{
-get_taxonomy(gis)
+get_taxonomy(accessions)
 }
 \arguments{
-\item{gis}{a character vector of the gis to retrieve}
+\item{accessions}{a character vector of the accessions to retrieve}
 }
 \value{
-data.frame of the 'gis, taxIds, and taxonomy
+data.frame of the 'accessions, taxIds, and taxonomy
 }
 \description{
 Retrieve the taxonomy information from NCBI for a set of nucleotide gis.

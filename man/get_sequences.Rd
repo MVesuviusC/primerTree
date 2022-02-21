@@ -5,7 +5,7 @@
 \title{Retrieves fasta sequences from NCBI nucleotide database.}
 \usage{
 get_sequences(
-  gi,
+  accession,
   start = NULL,
   stop = NULL,
   api_key = Sys.getenv("NCBI_API_KEY"),
@@ -15,7 +15,7 @@ get_sequences(
 )
 }
 \arguments{
-\item{gi}{the gi number of the sequence to retrieve}
+\item{accession}{the accession number of the sequence to retrieve}
 
 \item{start}{start bases to retrieve, numbered beginning at 1.  If NULL the
 beginning of the sequence.}

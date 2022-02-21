@@ -3,7 +3,7 @@
 
 #' Retrieves a fasta sequence from NCBI nucleotide database.
 #'
-#' @param gi nucleotide gi to retrieve.
+#' @param accession nucleotide accession to retrieve.
 #' @param start start base to retrieve, numbered beginning at 1.  If NULL the
 #'        beginning of the sequence.
 
@@ -14,11 +14,11 @@
 #' @seealso \code{\link{DNAbin}}
 #' @export
 
-get_sequence = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_KEY")){
+get_sequence = function(accession, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_KEY")){
 
   fetch_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
-  query=list(db='nuccore', rettype='fasta', retmode='text', id=gi)
+  query=list(db='nuccore', rettype='fasta', retmode='text', id=accession)
 
   if(!is.null(start))
     query$seq_start = start
@@ -45,7 +45,7 @@ get_sequence = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_
 
 #' Retrieves fasta sequences from NCBI nucleotide database.
 #'
-#' @param gi the gi number of the sequence to retrieve
+#' @param accession the accession number of the sequence to retrieve
 #' @param start start bases to retrieve, numbered beginning at 1.  If NULL the
 #'        beginning of the sequence.
 
@@ -61,9 +61,9 @@ get_sequence = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_
 #' @seealso \code{\link{DNAbin}}
 #' @export
 
-get_sequences = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_KEY"), simplify=TRUE, .parallel=FALSE, .progress='none'){
+get_sequences = function(accession, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API_KEY"), simplify=TRUE, .parallel=FALSE, .progress='none'){
   #expand arguments by recycling
-  args = expand_arguments(gi=gi, start=start, stop=stop)
+  args = expand_arguments(accession=accession, start=start, stop=stop)
   #assign expanded arguments to actual arguments
   lapply(seq_along(args), function(i) names(args)[i] <<- args[i])
 
@@ -77,10 +77,10 @@ get_sequences = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API
   https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/", immediate. = TRUE)
   }
 
-  size = length(gi)
+  size = length(accession)
   get_sequence_itr = function(i){
     start_time <- Sys.time()
-    sequence = get_sequence(gi[i], start[i], stop[i], api_key)
+    sequence = get_sequence(accession[i], start[i], stop[i], api_key)
     stop_time <- Sys.time()
     if((stop_time - start_time) < (1 / query_rate)) {
       #sleep to limit query rate :-(
@@ -88,8 +88,8 @@ get_sequences = function(gi, start=NULL, stop=NULL, api_key=Sys.getenv("NCBI_API
     }
     sequence
   }
-  sequences = alply(seq_along(gi), .margins=1, .parallel=.parallel, .progress=.progress, failwith(NA, f=get_sequence_itr))
-  names = if(simplify) gi else laply(sequences, names)
+  sequences = alply(seq_along(accession), .margins=1, .parallel=.parallel, .progress=.progress, failwith(NA, f=get_sequence_itr))
+  names = if(simplify) accession else laply(sequences, names)
   sequences = llply(sequences, `[[`, 1)
   names(sequences) = names
   class(sequences) = 'DNAbin'

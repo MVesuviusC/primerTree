@@ -26,11 +26,10 @@ Imports:
     httr,
     lubridate,
     plyr,
-    RCurl,
     reshape2,
     scales,
     stringr,
     XML
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

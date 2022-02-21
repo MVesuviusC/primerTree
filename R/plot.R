@@ -21,7 +21,7 @@ plot_tree_ranks = function(tree, taxonomy, main=NULL, type='unrooted',
                       ranks=common_ranks,  size=2,
                                     guide_size=NULL, legend_cutoff=25, ...){
   if(is.null(ranks))
-    ranks = setdiff(names(taxonomy), c('accession', 'gi', 'taxId'))
+    ranks = setdiff(names(taxonomy), c('accession', 'taxId'))
 
   plots = list()
   plots$structure = plot_tree(tree, main=main, guide_size=guide_size, type=type, ...)
@@ -81,7 +81,7 @@ plot_tree = function(tree, type='unrooted', main=NULL, guide_size=NULL,
     if(is.null(main))
       main = rank
 
-      x$tip = merge(x$tip, taxonomy, by.x='label', by.y='gi', all.x=T)
+      x$tip = merge(x$tip, taxonomy, by.x='label', by.y='accession', all.x=T)
 
       rows = na.omit(x$tip[, c('x','y',rank)])
       p = p+geom_point(data=rows, aes_string(x='x', y='y', color=rank),

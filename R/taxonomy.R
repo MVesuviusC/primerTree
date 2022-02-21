@@ -3,32 +3,32 @@
 
 #' Retrieve the taxonomy information from NCBI for a set of nucleotide gis.
 #'
-#' @param gis a character vector of the gis to retrieve
-#' @return data.frame of the 'gis, taxIds, and taxonomy
+#' @param accessions a character vector of the accessions to retrieve
+#' @return data.frame of the 'accessions, taxIds, and taxonomy
 #' @export
 
-get_taxonomy = function(gis){
+get_taxonomy = function(accessions){
 
-  gis = unique(as.character(gis))
-  taxids = gi2taxid(gis)
+  accessions = unique(as.character(accessions))
+  taxids = accession2taxid(accessions)
 
   taxonomy=fetch_taxonomy(unique(taxids))
   merge(
-    data.frame(gi=names(taxids), taxId=taxids, stringsAsFactors=FALSE),
+    data.frame(accession=names(taxids), taxId=taxids, stringsAsFactors=FALSE),
     taxonomy
   )
 }
-#' Maps a nucleotide database gi to a taxonomy database taxId
+#' Maps a nucleotide database accession to a taxonomy database taxId
 #'
-#' @param gi gi character vector to lookup.
+#' @param accessions accessions character vector to lookup.
 #' @return named vector of taxIds.
 #' @export
 
-gi2taxid = function(gi){
+accession2taxid = function(accessions){
   url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
 
-  names(gi) = rep('id', times=length(gi))
-  query=c(list(db='taxonomy', dbfrom='nuccore'), gi)
+  names(accessions) = rep('id', times=length(accessions))
+  query=c(list(db='taxonomy', dbfrom='nuccore', idtype='acc'), accessions)
 
   response=POST_retry(url, body=query)
 
@@ -47,29 +47,7 @@ parse_LinkSet = function(LinkSet){
   names(taxid) = gid
   taxid
 }
-#' Maps a genbank accession to a nuclotide database gi.
-#'
-#' @param accession accession character vector to lookup.
-#' @return named vector of gis.
-#' @export
 
-accession2gi = function(accession){
-  url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-  query=list(db='nuccore', rettype='seqid', id=paste(collapse=',', accession))
-
-  response=POST_retry(url, body=query)
-
-  #stop if response failed
-  stop_for_status(response)
-
-  mapping = gsub('.*?accession "([^"]+)"[^v]+version (\\d+).*?gi (\\d+)\n+',
-                 '"\\1.\\2"="\\3",', content(response, 'text'))
-  #remove trailing , from the substitution
-  mapping = substr(mapping, 0, nchar(mapping)-1)
-
-  #convert to named vector
-  eval(parse(text=paste('c(', mapping, ')', sep='')))
-}
 fetch_taxonomy = function(taxid) {
 
   fetch_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
