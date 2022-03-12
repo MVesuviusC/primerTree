@@ -1,5 +1,8 @@
 # primerTree 1.0.6
 
+* Changed how matches are handled internally to use accession numbers instead of
+  gi numbers.
+
 # primerTree 1.0.5
 
 * `search_primer_pair()` gains a `api_key` parameter, or you can set `NCBI_API_KEY` as an environment variable (@MVesuviusC, #36)

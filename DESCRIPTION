@@ -9,7 +9,8 @@ Authors@R:
           email = "james.hester@gmail.com"),
       person(given = "Matt",
         family = "Cannon",
-        role = "aut"))
+        role = "aut",
+        email = "matthewvc1@gmail.com"))
 Description: Identifies potential target sequences for a given
     set of primers and generates phylogenetic trees annotated with the
     taxonomies of the predicted amplification products.
