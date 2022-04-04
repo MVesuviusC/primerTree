@@ -5,11 +5,11 @@ Version: 1.0.6
 Authors@R: 
     c(person(given = "Jim",
           family = "Hester",
-          role = c("aut", "cre"),
+          role = "aut",
           email = "james.hester@gmail.com"),
       person(given = "Matt",
         family = "Cannon",
-        role = "aut",
+        role = c("aut", "cre"),
         email = "matthewvc1@gmail.com"))
 Description: Identifies potential target sequences for a given
     set of primers and generates phylogenetic trees annotated with the
