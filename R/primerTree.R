@@ -10,6 +10,7 @@
 #' obtained using \code{\link{search_primer_pair}}
 #' @name primerTree
 #' @docType package
+#' @aliases primerTree-package
 #' @import ggplot2 XML ape httr plyr directlabels gridExtra
 #'   stringr foreach
 #' @importFrom lubridate %--% seconds now
