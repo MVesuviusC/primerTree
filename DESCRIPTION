@@ -1,7 +1,7 @@
 Package: primerTree
 Title: Visually Assessing the Specificity and Informativeness of
     Primer Pairs
-Version: 1.0.6
+Version: 1.0.7
 Authors@R: 
     c(person(given = "Jim",
           family = "Hester",

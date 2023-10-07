@@ -1,3 +1,8 @@
+# primerTree 1.0.7
+
+* Couple of internal changes to fix CRAN issue
+* Also updated documentation for filter_seqs
+
 # primerTree 1.0.6
 
 * Changed how matches are handled internally to use accession numbers instead of
