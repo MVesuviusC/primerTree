@@ -30,9 +30,9 @@ unwanted reads.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{primerTree}: Method for primerTree objects
-}}
+\item \code{filter_seqs(primerTree)}: Method for primerTree objects
 
+}}
 \examples{
 \dontrun{
 # filter out sequences longer or shorter than desired:
