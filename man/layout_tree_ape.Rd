@@ -8,9 +8,9 @@
 layout_tree_ape(tree, ...)
 }
 \arguments{
-\item{tree}{The \code{\link{phylo}} tree to be plotted}
+\item{tree}{The \code{\link[ape]{phylo}} tree to be plotted}
 
-\item{...}{additional arguments to \code{\link{plot.phylo}}}
+\item{...}{additional arguments to \code{\link[ape]{plot.phylo}}}
 }
 \value{
 \item{edge}{list of x, y and xend, yend coordinates

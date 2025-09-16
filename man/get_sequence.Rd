@@ -29,5 +29,5 @@ an DNAbin object.
 Retrieves a fasta sequence from NCBI nucleotide database.
 }
 \seealso{
-\code{\link{DNAbin}}
+\code{\link[ape]{DNAbin}}
 }

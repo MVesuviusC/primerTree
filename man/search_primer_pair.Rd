@@ -2,8 +2,8 @@
 % Please edit documentation in R/primerTree.R
 \name{search_primer_pair}
 \alias{search_primer_pair}
-\title{Automatic primer searching Search a given primer pair, retrieving the alignment
-results, their product sequences, the taxonomic information for the sequences,
+\title{Automatic primer search Search a given primer pair, retrieving the alignment
+results, their product sequences, taxonomic information for the sequences,
 a multiple alignment of the products}
 \usage{
 search_primer_pair(
@@ -14,7 +14,7 @@ search_primer_pair(
   num_permutations = 25,
   simplify = TRUE,
   clustal_options = list(),
-  distance_options = list(model = "N", pairwise.deletion = T),
+  distance_options = list(model = "N", pairwise.deletion = TRUE),
   api_key = Sys.getenv("NCBI_API_KEY"),
   ...,
   .parallel = FALSE,
@@ -30,9 +30,9 @@ search_primer_pair(
 
 \item{num_aligns}{number of alignment results to keep}
 
-\item{num_permutations}{the number of primer permutations to search, if the degenerate bases
-cause more than this number of permutations to exist, this number will be
-sampled from all possible permutations.}
+\item{num_permutations}{the number of primer permutations to search, if the
+degenerate bases cause more than this number of permutations to exist,
+this number will be sampled from all possible permutations.}
 
 \item{simplify}{use simple names for primer hit results or complex}
 
@@ -40,7 +40,7 @@ sampled from all possible permutations.}
 \code{link{clustalo}} for a list of options}
 
 \item{distance_options}{a list of options to pass to dist.dna, see
-\code{link{dist.dna}} for a list of options}
+\code{link[ape]{dist.dna}} for a list of options}
 
 \item{api_key}{NCBI api-key to allow faster sequence retrieval}
 
@@ -50,13 +50,13 @@ sampled from all possible permutations.}
 provided by foreach}
 
 \item{.progress}{name of the progress bar to use, see
-\code{\link{create_progress_bar}}}
+\code{\link[plyr]{create_progress_bar}}}
 }
 \value{
 A list with the following elements,
 \item{name}{name of the primer pair}
 \item{BLAST_result}{html blast results from Primer-BLAST as
- 'a \code{\link{response}}} object.
+ 'a \code{\link[httr]{response}}} object.
 \item{taxonomy}{taxonomy for the primer products from NCBI}
 \item{sequence}{sequence of the primer products}
 \item{alignment}{multiple alignment of the primer products}
@@ -64,8 +64,8 @@ A list with the following elements,
 'multiple alignment}
 }
 \description{
-Automatic primer searching Search a given primer pair, retrieving the alignment
-results, their product sequences, the taxonomic information for the sequences,
+Automatic primer search Search a given primer pair, retrieving the alignment
+results, their product sequences, taxonomic information for the sequences,
 a multiple alignment of the products
 }
 \examples{

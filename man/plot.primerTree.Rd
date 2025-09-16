@@ -12,7 +12,7 @@
 \item{ranks}{The ranks to include, defaults to all common ranks, if NULL
 print all ranks.  If 'none' just print the layout.}
 
-\item{main}{an optional title to display, if NULL displays the name as the title}
+\item{main}{optional title to display, if NULL displays the name as the title}
 
 \item{...}{additional arguments passed to plot_tree_ranks}
 }

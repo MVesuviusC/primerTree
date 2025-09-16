@@ -21,9 +21,9 @@ primer_search(
 
 \item{num_aligns}{number of alignment results to keep}
 
-\item{num_permutations}{the number of primer permutations to search, if the degenerate bases
-cause more than this number of permutations to exist, this number will be
-sampled from all possible permutations.}
+\item{num_permutations}{the number of primer permutations to search, if the
+degenerate bases cause more than this number of permutations to exist,
+this number will be sampled from all possible permutations.}
 
 \item{...}{additional arguments passed to Primer-Blast}
 
@@ -33,7 +33,8 @@ provided by foreach}
 \item{.progress}{name of the progress bar to use, see 'create_progress_bar'}
 }
 \value{
-httr response object of the query, pass to \code{\link{parse_primer_hits}} to parse the results.
+httr response object of the query, pass to
+       \code{\link{parse_primer_hits}} to parse the results.
 }
 \description{
 ambiguity codes, enumerate all possible combinations and combine the

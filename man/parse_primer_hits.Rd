@@ -7,7 +7,8 @@
 parse_primer_hits(response)
 }
 \arguments{
-\item{response}{a httr response object obtained from \code{\link{primer_search}}}
+\item{response}{a httr response object obtained from
+\code{\link{primer_search}}}
 }
 \description{
 Parse the primer hits

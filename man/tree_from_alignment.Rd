@@ -9,7 +9,7 @@ tree_from_alignment(dna, pairwise.deletion = TRUE, ...)
 \arguments{
 \item{dna}{fasta dna object the tree is to be constructed from}
 
-\item{pairwise.deletion}{a logical indicating if the distance matrix should 
+\item{pairwise.deletion}{a logical indicating if the distance matrix should
 be constructed using pairwise deletion}
 
 \item{...}{furthur arguments to dist.dna}
@@ -18,5 +18,5 @@ be constructed using pairwise deletion}
 Construct a neighbor joining tree from a dna alignment
 }
 \seealso{
-\code{\link{dist.dna}}, \code{\link{nj}}
+\code{\link[ape]{dist.dna}}, \code{\link[ape]{nj}}
 }
