@@ -7,9 +7,9 @@
 #' @return data.frame of the 'accessions, taxIds, and taxonomy
 #' @export
 
-get_taxonomy <- function(accessions) {
+get_taxonomy <- function(accessions, api_key = Sys.getenv("NCBI_API_KEY")) {
     accessions <- unique(as.character(accessions))
-    taxids <- accession2taxid(accessions)
+    taxids <- accession2taxid(accessions, api_key)
 
     taxonomy <- fetch_taxonomy(unique(taxids))
     merge(
@@ -27,23 +27,48 @@ get_taxonomy <- function(accessions) {
 #' @return named vector of taxIds.
 #' @export
 
-accession2taxid <- function(accessions) {
+accession2taxid <- function(accessions, api_key = Sys.getenv("NCBI_API_KEY")) {
     url <- "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
 
     names(accessions) <- rep("id", times = length(accessions))
-    query <- c(
-        list(db = "taxonomy", dbfrom = "nuccore", idtype = "acc"),
-        accessions
-    )
+    # query <- c(
+    #     list(db = "taxonomy", dbfrom = "nuccore", idtype = "acc"),
+    #     accessions[41:50]
+    # )
 
-    response <- POST_retry(url, body = query)
+    request_base <-
+        httr2::request(url) |>
+        httr2::req_method("POST")
 
-    #stop if response failed
-    stop_for_status(response)
+    acc_chunks <- split(accessions, ceiling(seq_along(accessions) / 100))
+    # this keeps the names from populating taxids
+    names(acc_chunks) <- NULL
 
-    parsed <- XML::xmlParse(content(response, as = "text"))
+    taxids <-
+        lapply(
+            acc_chunks,
+            function(acc) {
+                request_base |>
+                    httr2::req_body_form(
+                        db = "taxonomy",
+                        dbfrom = "nuccore",
+                        idtype = "acc",
+                        id = acc,
+                        .multi = "explode"
+                    ) |>
+                    httr2::req_retry(max_tries = 5) |>
+                    httr2::req_perform() |>
+                    httr2::resp_body_string() |>
+                    XML::xmlParse() |>
+                    XML::xpathSApply(
+                        "//LinkSet",
+                        parse_LinkSet
+                    )
+            }
+        ) |>
+        unlist()
 
-    XML::xpathSApply(parsed, "//LinkSet", parse_LinkSet)
+    taxids
 }
 parse_LinkSet <- function(LinkSet) {
     gid <- XML::xpathSApply(LinkSet, ".//IdList/Id", xmlValue)
