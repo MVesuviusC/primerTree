@@ -2,7 +2,7 @@ Package: primerTree
 Title: Visually Assessing the Specificity and Informativeness of
     Primer Pairs
 Version: 1.0.7
-Authors@R: 
+Authors@R:
     c(person(given = "Jim",
           family = "Hester",
           role = "aut",
@@ -18,7 +18,7 @@ License: GPL-2
 Depends:
     directlabels,
     gridExtra,
-    R (>= 3.0.0)
+    R (>= 4.1.0)
 Imports:
     ape,
     foreach,
