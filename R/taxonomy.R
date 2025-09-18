@@ -7,9 +7,9 @@
 #' @return data.frame of the 'accessions, taxIds, and taxonomy
 #' @export
 
-get_taxonomy <- function(accessions, api_key = Sys.getenv("NCBI_API_KEY")) {
+get_taxonomy <- function(accessions) {
     accessions <- unique(as.character(accessions))
-    taxids <- accession2taxid(accessions, api_key)
+    taxids <- accession2taxid(accessions)
 
     taxonomy <- fetch_taxonomy(unique(taxids))
     merge(
@@ -27,52 +27,36 @@ get_taxonomy <- function(accessions, api_key = Sys.getenv("NCBI_API_KEY")) {
 #' @return named vector of taxIds.
 #' @export
 
-accession2taxid <- function(accessions, api_key = Sys.getenv("NCBI_API_KEY")) {
-    url <- "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
-
-    names(accessions) <- rep("id", times = length(accessions))
-    # query <- c(
-    #     list(db = "taxonomy", dbfrom = "nuccore", idtype = "acc"),
-    #     accessions[41:50]
-    # )
-
-    request_base <-
-        httr2::request(url) |>
-        httr2::req_method("POST")
-
-    acc_chunks <- split(accessions, ceiling(seq_along(accessions) / 100))
-    # this keeps the names from populating taxids
-    names(acc_chunks) <- NULL
+accession2taxid <- function(accessions) {
+    url <- "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 
     taxids <-
-        lapply(
-            acc_chunks,
-            function(acc) {
-                request_base |>
-                    httr2::req_body_form(
-                        db = "taxonomy",
-                        dbfrom = "nuccore",
-                        idtype = "acc",
-                        id = acc,
-                        .multi = "explode"
-                    ) |>
-                    httr2::req_retry(max_tries = 5) |>
-                    httr2::req_perform() |>
-                    httr2::resp_body_string() |>
-                    XML::xmlParse() |>
-                    XML::xpathSApply(
-                        "//LinkSet",
-                        parse_LinkSet
-                    )
-            }
+        httr2::request(url) |>
+        httr2::req_method("POST") |>
+        httr2::req_body_form(
+            db = "nuccore",
+            id = paste0(accessions, collapse = ",")
         ) |>
-        unlist()
+        httr2::req_retry(max_tries = 5) |>
+        httr2::req_perform() |>
+        httr2::resp_body_string() |>
+        XML::xmlParse() |>
+        XML::xpathSApply(
+            "//DocSum",
+            parse_docsum
+        )
 
     taxids
 }
-parse_LinkSet <- function(LinkSet) {
-    gid <- XML::xpathSApply(LinkSet, ".//IdList/Id", xmlValue)
-    taxid <- XML::xpathSApply(LinkSet, ".//LinkSetDb/Link/Id", xmlValue)
+parse_docsum <- function(docsum) {
+    gid <- XML::xpathSApply(
+        docsum,
+        ".//Item[@Name='AccessionVersion']", XML::xmlValue
+    )
+    taxid <- XML::xpathSApply(
+        docsum,
+        ".//Item[@Name='TaxId']", XML::xmlValue
+    )
     if (length(taxid) != 1) {
         taxid <- NA
     }

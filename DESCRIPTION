@@ -25,6 +25,7 @@ Imports:
     ggplot2,
     grid,
     httr,
+    httr2,
     lubridate,
     plyr,
     reshape2,
