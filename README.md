@@ -21,15 +21,19 @@ install.packages('primerTree')
 #### Github ####
 ```s
 # install.packages("devtools")
-devtools::install_github("jimhester/primerTree")
+devtools::install_github("mvesuviusc/primerTree")
 ```
 ### [Clustal Omega](http://www.clustal.org/omega/#Download) Installation ###
 #### Windows ####
 Use the pre-compiled windows binary.  Either put the installed clustalo.exe in your path, or pass the path to the executable in the clustal_options option
 ```s
 library(primerTree)
-mammals_16S = search_primer_pair(name='Mammals 16S',
-  'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT', clustal_options=c(exec='C:\Program Files\Clustal Omega\clustalo.exe'))
+mammals_16S <- search_primer_pair(
+    name = 'Mammals 16S',
+    'CGGTTGGGGTGACCTCGGA',
+    'GCTGTTATCCCTAGGGTAACT',
+    clustal_options = c(exec = 'C:\Program Files\Clustal Omega\clustalo.exe')
+)
 ```
 #### Linux ####
 Simple installation from source
@@ -62,7 +66,11 @@ From the clustalo directory:
 Simple search for a Mammal 16S primer
 ```s
 library(primerTree)
-mammals_16S = search_primer_pair(name='Mammals 16S', 'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT')
+mammals_16S <- search_primer_pair(
+    name = 'Mammals 16S',
+    'CGGTTGGGGTGACCTCGGA',
+    'GCTGTTATCCCTAGGGTAACT'
+)
 plot(mammals_16S)
 ```
 
@@ -71,7 +79,11 @@ Using the parallel features with the multicore package using the doMC backend, w
 library(doMC)
 registerDoMC(8)
 library(primerTree)
-mammals_16S = search_primer_pair(name='Mammals 16S',
-  'CGGTTGGGGTGACCTCGGA', 'GCTGTTATCCCTAGGGTAACT', .parallel=T)
+mammals_16S <- search_primer_pair(
+    name = 'Mammals 16S',
+    'CGGTTGGGGTGACCTCGGA',
+    'GCTGTTATCCCTAGGGTAACT',
+    .parallel = TRUE
+)
 plot(mammals_16S)
 ```
