@@ -1,3 +1,11 @@
+# primerTree 1.1.0
+
+* Updated code to comply with current CRAN standards
+* Fixed missing package anchors in roxygen \link{} sections for external packages
+* All code formatted to tidyverse style guide standards using the air package
+* Added package prefix to all non-base R functions
+* Updated internal function to use httr2 instead of httr due to NCBI eutils API bug, which adds httr2 as a dependency
+
 # primerTree 1.0.7
 
 * Couple of internal changes to fix CRAN issue
